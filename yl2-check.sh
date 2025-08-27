@@ -155,3 +155,7 @@ if tail -n 10 kasutajad.txt | grep -q "history"; then
 else
     fail "Fail kasutajad.txt lõpus pole history väljundit"
 fi
+
+# --- Kokkuvõte ---
+echo ">>> Kontroll valmis."
+echo "Tulemused: $SCORE / $TOTAL õiget kontrollpunkti."
