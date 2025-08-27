@@ -3,9 +3,10 @@
 
 ok()  { echo "✅ $1"; SCORE=$((SCORE+1)); TOTAL=$((TOTAL+1)); }
 fail(){ echo "❌ $1"; TOTAL=$((TOTAL+1)); }
+KODU="/home/student"
 
 # 2. Kas fail kasutajad.txt on olemas ja algab uptime väljundiga
-if [ -f "kasutajad.txt" ]; then
+if [ -f "$KODU/kasutajad.txt" ]; then
     if grep -q "load average" kasutajad.txt; then
         ok "Fail kasutajad.txt olemas ja sisaldab uptime väljundit"
     else
@@ -15,8 +16,8 @@ else
     fail "Fail kasutajad.txt puudub"
 fi
 
-# 3. Kas kasutajad jyri, mari ja kalle on olemas
-for user in jyri mari kalle; do
+# 3. Kas kasutajad jyri, mari on olemas
+for user in jyri mari; do
     if id "$user" &>/dev/null; then
         ok "Kasutaja $user olemas"
     else
@@ -27,7 +28,7 @@ done
 # 4. Grupp praktikandid ja liikmed
 if getent group praktikandid >/dev/null; then
     ok "Grupp praktikandid olemas"
-    for user in jyri mari kalle; do
+    for user in jyri mari; do
         if id -nG "$user" | grep -qw praktikandid; then
             ok "Kasutaja $user on grupis praktikandid"
         else
@@ -53,11 +54,11 @@ else
 fi
 
 # 7. Jyri.txt olemas ja sisaldab tema gruppe
-if [ -f /home/jyri/jyri.txt ]; then
-    if grep -q "jyri" /home/jyri/jyri.txt; then
-        ok "Fail jyri.txt olemas ja sisaldab kasutaja gruppe"
+if [ -f "$KODU/jyri.txt" ]; then
+    if grep -q "jyri" "$KODU/jyri.txt" && (grep -q "sudo" "$KODU/jyri.txt" || grep -q "wheel" "$KODU/jyri.txt"); then
+        ok "Fail jyri.txt olemas ja sisaldab kasutaja jyri gruppe (sh sudo/wheel)"
     else
-        fail "Fail jyri.txt ei sisalda õiget infot"
+        fail "Fail jyri.txt ei sisalda õiget infot (puudu jyri või sudo/wheel)"
     fi
 else
     fail "Fail jyri.txt puudub"
@@ -77,16 +78,17 @@ else
     ok "Grupp ajutine on kustutatud"
 fi
 
-# 10. Jyri parooli muutust ei saa turvaliselt kontrollida → ainult märge
-ok "Jyri parooli muutust kontrolli käsitsi (skript ei saa parooli avada)"
+# 10. Jyri parooli muutust ei saa skriptiga kontrollida → ainult märge
+ok "Jyri parooli muutust ei saa kahjuks skriptiga kontrollida"
 
 # 11. Kas kasutaja teenus olemas ja tal pole parooli
 if id teenus &>/dev/null; then
-    passwd -S teenus 2>/dev/null | grep -q "NP"
-    if [ $? -eq 0 ]; then
-        ok "Kasutaja teenus olemas ja tal pole parooli"
+    SHADOW=$(getent shadow teenus | cut -d: -f2 || true)
+    # NP loeme kehtivaks, kui parooliväli on tühi või täpselt "!", "!!" või "*"
+    if [ -z "$SHADOW" ] || [[ "$SHADOW" == "!" || "$SHADOW" == "!!" || "$SHADOW" == "*" ]]; then
+        ok "Kasutaja teenus olemas ja parooli pole"
     else
-        fail "Kasutaja teenus olemas, aga tal on parool"
+        fail "Kasutaja teenus olemas, kuid parooliväli pole tühi (shadow='$SHADOW')"
     fi
 else
     fail "Kasutaja teenus puudub"
@@ -96,7 +98,11 @@ fi
 if id kalmer &>/dev/null; then
     fail "Kasutaja kalmer on endiselt alles"
 else
-    ok "Kasutaja kalmer on kustutatud"
+    if [ -d "/home/kalmer" ]; then
+        fail "Kasutaja kalmer kustutatud, aga kodukataloog /home/kalmer on alles"
+    else
+        ok "Kasutaja kalmer ja tema kodukataloog on kustutatud"
+    fi
 fi
 
 # 13. Kasutaja mari lukustatud
@@ -106,26 +112,22 @@ else
     fail "Kasutaja mari ei ole lukustatud"
 fi
 
-# 14. Kontrollime, kas on loodud kasutaja sama nimega nagu sisseloginud kasutaja
-MYUSER=$(whoami)
-if id "$MYUSER" &>/dev/null; then
-    ok "Kasutaja $MYUSER loodud"
-else
-    fail "Sinu nimeline kasutaja ($MYUSER) puudub"
-fi
-
-# 15. Fail mina.txt olemas ja sisaldab sinu kasutaja infot
-if [ -f /home/$MYUSER/mina.txt ]; then
-    if grep -q "$MYUSER" /home/$MYUSER/mina.txt; then
-        ok "Fail mina.txt sisaldab sinu kasutaja infot"
+# 14. Fail mina.txt olemas ja 4. väli ei ole tühi või ainult komad
+if [ -f "$KODU/mina.txt" ]; then
+    # Võtame faili esimese rea 4. välja
+    FIELD4=$(cut -d: -f5 "$KODU/mina.txt")
+    
+    # Eemaldame kõik komad ja tühikud ning kontrollime, kas midagi jäi alles
+    if [ -n "$(echo "$FIELD4" | tr -d ' ,')" ]; then
+        ok "Fail mina.txt sisaldab tõenäoliselt sinu kasutajanime"
     else
-        fail "Fail mina.txt ei sisalda sinu kasutaja infot"
+        fail "Fail mina.txt ei sisalda õigel väljal sinu täispikka nime"
     fi
 else
     fail "Fail mina.txt puudub"
 fi
 
-# 16. Kas kasutaja kersti olemas ja failid üle toodud
+# 15. Kas kasutaja kersti olemas ja failid üle toodud
 if id kersti &>/dev/null; then
     ok "Kasutaja kersti olemas"
     if [ -d /home/kersti ]; then
@@ -134,7 +136,7 @@ if id kersti &>/dev/null; then
         if [ "$COUNT" -ge 50 ] && [ "$EXT" -ge 4 ]; then
             ok "Sekretäri failid on üle toodud (≥50 faili, ≥4 laiendit)"
         else
-            fail "Sekretäri failid ei vasta tingimustele"
+            fail "Sekretäri failid ei ole kõik üle toodud"
         fi
     else
         fail "Kasutaja kersti kodukaust puudub"
@@ -143,13 +145,7 @@ else
     fail "Kasutaja kersti puudub"
 fi
 
-# 17-18. Kas kasutajad.txt lõpus on history ja uptime väljundid
-if tail -n 5 kasutajad.txt | grep -q "load average"; then
-    ok "Fail kasutajad.txt lõpus on uptime väljund"
-else
-    fail "Fail kasutajad.txt lõpus pole uptime väljundit"
-fi
-
+# 16. Kas kasutajad.txt lõpus on history väljund
 if tail -n 10 kasutajad.txt | grep -q "history"; then
     ok "Fail kasutajad.txt lõpus on history väljund"
 else
