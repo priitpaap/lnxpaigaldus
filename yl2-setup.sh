@@ -36,7 +36,7 @@ for user in "${!EXIST_USERS[@]}"; do
 done
 
 # --- 3. Loo sekretäri kodukausta failid ---
-SEC_HOME="/home/sektetar"
+SEC_HOME="/home/sekretar"
 mkdir -p "$SEC_HOME"
 
 # 50 faili, vähemalt 4 erinevat laiendit (.txt, .log, .conf, .dat)
