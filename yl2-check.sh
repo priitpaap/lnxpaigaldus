@@ -1,8 +1,8 @@
 #!/bin/bash
 # Kontrollskript "kasutajate haldus" ülesande jaoks
 
-ok() { echo "[OK] $1"; }
-fail() { echo "[FAIL] $1"; }
+ok()  { echo "✅ $1"; SCORE=$((SCORE+1)); TOTAL=$((TOTAL+1)); }
+fail(){ echo "❌ $1"; TOTAL=$((TOTAL+1)); }
 
 # 2. Kas fail kasutajad.txt on olemas ja algab uptime väljundiga
 if [ -f "kasutajad.txt" ]; then
