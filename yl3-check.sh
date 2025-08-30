@@ -22,10 +22,10 @@ else
     fail "Fail esimene puudub"
 fi
 
-# 4. Fail "teine" õigused 444
+# 4. Fail "teine" õigused 644
 if [ -f "$KODU/teine" ]; then
-    if [ "$(stat -c "%a" $KODU/teine)" = "444" ]; then
-        ok "Fail teine õigused õiged (444)"
+    if [ "$(stat -c "%a" $KODU/teine)" = "644" ]; then
+        ok "Fail teine õigused õiged (644)"
     else
         fail "Fail teine õigused valed"
     fi
