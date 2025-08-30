@@ -135,15 +135,16 @@ else
 fi
 
 # 16. Kaust /var/vanadfailid SGID
-if [ -d "/var/vanadfailid" ]; then
-    if [ "$(stat -c "%A" /var/vanadfailid)" =~ "s" ]; then
-        ok "Kaust /var/vanadfailid SGID peal"
+if [ -d /var/avalik ]; then
+    if [ -g /var/avalik ]; then
+        ok "Kaust /var/avalik SGID peal"
     else
-        fail "Kaust /var/vanadfailid SGID puudu"
+        fail "Kaust /var/avalik SGID puudu"
     fi
 else
-    fail "Kaust /var/vanadfailid puudub"
+    fail "Kaust /var/avalik puudub"
 fi
+
 
 #17
 if [ -d /var/avalik ]; then
