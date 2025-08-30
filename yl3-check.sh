@@ -145,9 +145,9 @@ else
     fail "Kaust /var/vanadfailid puudub"
 fi
 
-# 17. Kaust /var/avalik sticky bit
-if [ -d "/var/avalik" ]; then
-    if [ "$(stat -c "%A" /var/avalik)" =~ "t" ]; then
+#17
+if [ -d /var/avalik ]; then
+    if [ -k /var/avalik ]; then
         ok "Kaust /var/avalik sticky bit peal"
     else
         fail "Kaust /var/avalik sticky bit puudu"
@@ -155,6 +155,7 @@ if [ -d "/var/avalik" ]; then
 else
     fail "Kaust /var/avalik puudub"
 fi
+
 
 # --- Kokkuvõte ---
 echo ">>> Kontroll valmis."
