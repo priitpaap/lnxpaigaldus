@@ -91,19 +91,20 @@ fi
 
 # 12. Kontrollime, et kaustal /var/failid on SGID bitt
 if [ -d "/var/failid" ]; then
-    # %A kuvab õigused tähelistes (nt drwxrwsr-x)
-    if stat -c "%A" /var/failid | grep -q "s"; then
+    if [ -g /var/failid ] ; then
         ok "Kaustal /var/failid on SGID bitt"
     else
         fail "Kaustal /var/failid puudub SGID bitt"
     fi
+else
+    fail "Kausta /var/failid ei eksisteeri"
 fi
 
 
 # 13. skript1.sh – teised ei tohi käivitada (750 või 770)
 if [ -f "/var/skriptid/skript1.sh" ]; then
     PERM=$(stat -c "%a" /var/skriptid/skript1.sh)
-    if [[ "$PERM" =~ ^7[57]0$ ]]; then
+    if [[ "$PERM" =~ ^754$ ]]; then
         ok "skript1.sh õigused õiged ($PERM)"
     else
         fail "skript1.sh õigused valed ($PERM)"
@@ -114,8 +115,8 @@ fi
 
 # 14. skript2.sh – teised ei tohi lugeda, aga saavad käivitada
 if [ -f "/var/skriptid/skript2.sh" ]; then
-    if [ "$(stat -c "%a" /var/skriptid/skript2.sh)" = "711" ]; then
-        ok "skript2.sh õigused õiged (711)"
+    if [ "$(stat -c "%a" /var/skriptid/skript2.sh)" = "751" ]; then
+        ok "skript2.sh õigused õiged (751)"
     else
         fail "skript2.sh õigused valed"
     fi
@@ -134,19 +135,7 @@ else
     fail "Kaust /srv/lepingud puudub"
 fi
 
-# 16. Kaust /var/vanadfailid SGID
-if [ -d /var/avalik ]; then
-    if [ -g /var/avalik ]; then
-        ok "Kaust /var/avalik SGID peal"
-    else
-        fail "Kaust /var/avalik SGID puudu"
-    fi
-else
-    fail "Kaust /var/avalik puudub"
-fi
-
-
-#17
+# 16. Kaust /var/avalik sticky bit
 if [ -d /var/avalik ]; then
     if [ -k /var/avalik ]; then
         ok "Kaust /var/avalik sticky bit peal"
@@ -156,7 +145,6 @@ if [ -d /var/avalik ]; then
 else
     fail "Kaust /var/avalik puudub"
 fi
-
 
 # --- Kokkuvõte ---
 echo ">>> Kontroll valmis."
