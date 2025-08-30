@@ -19,11 +19,10 @@ touch "$STUDENT_HOME/backup.sh"
 # Lisa natuke sisu backup.sh sisse
 echo -e "#!/bin/bash\necho 'Backup tehtud'" > "$STUDENT_HOME/backup.sh"
 
-echo "[INFO] Loon kataloogid /var/failid, /var/skriptid, /srv/lepingud, /var/vanadfailid, /var/avalik..."
+echo "[INFO] Loon kataloogid /var/failid, /var/skriptid, /srv/lepingud, /var/avalik..."
 mkdir -p /var/failid
 mkdir -p /var/skriptid
 mkdir -p /srv/lepingud
-mkdir -p /var/vanadfailid
 mkdir -p /var/avalik
 
 echo "[INFO] Loon failid skript1.sh ja skript2.sh..."
@@ -43,13 +42,6 @@ for i in {1..7}; do
     echo "Leping tekst $i" > /srv/lepingud/leping$i.txt
     echo "Leping log $i" > /srv/lepingud/leping$i.log
     echo "Leping conf $i" > /srv/lepingud/leping$i.conf
-done
-
-echo "[INFO] Loon vähemalt 20 faili kolme erineva laiendiga /var/vanadfailid alla..."
-for i in {1..7}; do
-    echo "Vana tekst $i" > /var/vanadfailid/vana$i.txt
-    echo "Vana log $i" > /var/vanadfailid/vana$i.log
-    echo "Vana conf $i" > /var/vanadfailid/vana$i.conf
 done
 
 echo "[INFO] Loon vähemalt 20 faili kolme erineva laiendiga /var/avalik alla..."
