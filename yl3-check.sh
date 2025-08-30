@@ -1,0 +1,148 @@
+#!/bin/bash
+
+ok()   { echo "[OK] $1"; }
+fail() { echo "[FAIL] $1"; }
+
+KODU="/home/student"
+
+# 2. Fail kaustaoigused.txt olemas
+if [ -f "$KODU/kaustaoigused.txt" ]; then
+    ok "Fail kaustaoigused.txt olemas"
+else
+    fail "Fail kaustaoigused.txt puudub"
+fi
+
+# 3. Fail "esimene" õigused 660
+if [ -f "$KODU/esimene" ]; then
+    if [ "$(stat -c "%a" $KODU/esimene)" = "660" ]; then
+        ok "Fail esimene õigused õiged (660)"
+    else
+        fail "Fail esimene õigused valed ($(stat -c "%a" $KODU/esimene))"
+    fi
+else
+    fail "Fail esimene puudub"
+fi
+
+# 4. Fail "teine" õigused 444
+if [ -f "$KODU/teine" ]; then
+    if [ "$(stat -c "%a" $KODU/teine)" = "444" ]; then
+        ok "Fail teine õigused õiged (444)"
+    else
+        fail "Fail teine õigused valed ($(stat -c "%a" $KODU/teine))"
+    fi
+else
+    fail "Fail teine puudub"
+fi
+
+# 5. Fail backup.sh õigused 750
+if [ -f "$KODU/backup.sh" ]; then
+    if [ "$(stat -c "%a" $KODU/backup.sh)" = "750" ]; then
+        ok "Fail backup.sh õigused õiged (750)"
+    else
+        fail "Fail backup.sh õigused valed ($(stat -c "%a" $KODU/backup.sh))"
+    fi
+else
+    fail "Fail backup.sh puudub"
+fi
+
+# 6–7. Kasutaja jyri olemas ja fail esimene omanikuks jyri
+if id jyri &>/dev/null; then
+    if [ "$(stat -c "%U:%G" $KODU/esimene 2>/dev/null)" = "jyri:jyri" ]; then
+        ok "Fail esimene omanik ja grupp on jyri"
+    else
+        fail "Fail esimene ei kuulu kasutajale ja grupile jyri"
+    fi
+else
+    fail "Kasutaja jyri puudub"
+fi
+
+# 8–9. Kaust docs õigused 700
+if [ -d "$KODU/docs" ]; then
+    if [ "$(stat -c "%a" $KODU/docs)" = "700" ]; then
+        ok "Kaust docs õigused õiged (700)"
+    else
+        fail "Kaust docs õigused valed ($(stat -c "%a" $KODU/docs))"
+    fi
+else
+    fail "Kaust docs puudub"
+fi
+
+# 10. Kaust /var/failid õigused 754
+if [ -d "/var/failid" ]; then
+    if [ "$(stat -c "%a" /var/failid)" = "754" ]; then
+        ok "Kaust /var/failid õigused õiged (754)"
+    else
+        fail "Kaust /var/failid õigused valed ($(stat -c "%a" /var/failid))"
+    fi
+else
+    fail "Kaust /var/failid puudub"
+fi
+
+# 11–12. Kausta /var/failid grupp = raamatupidajad ja SGID peal
+if [ -d "/var/failid" ]; then
+    if [ "$(stat -c "%G" /var/failid)" = "raamatupidajad" ]; then
+        if [ "$(stat -c "%a" /var/failid | cut -c1)" = "2" ] || [ "$(stat -c "%A" /var/failid | grep s)" ]; then
+            ok "Kaust /var/failid grupiks raamatupidajad ja SGID olemas"
+        else
+            fail "Kaust /var/failid grupiks raamatupidajad, aga SGID puudub"
+        fi
+    else
+        fail "Kausta /var/failid grupp ei ole raamatupidajad"
+    fi
+fi
+
+# 13. skript1.sh – teised ei tohi käivitada (750 või 770)
+if [ -f "/var/skriptid/skript1.sh" ]; then
+    PERM=$(stat -c "%a" /var/skriptid/skript1.sh)
+    if [[ "$PERM" =~ ^7[57]0$ ]]; then
+        ok "skript1.sh õigused õiged ($PERM)"
+    else
+        fail "skript1.sh õigused valed ($PERM)"
+    fi
+else
+    fail "Fail /var/skriptid/skript1.sh puudub"
+fi
+
+# 14. skript2.sh – teised ei tohi lugeda, aga saavad käivitada
+if [ -f "/var/skriptid/skript2.sh" ]; then
+    if [ "$(stat -c "%a" /var/skriptid/skript2.sh)" = "711" ]; then
+        ok "skript2.sh õigused õiged (711)"
+    else
+        fail "skript2.sh õigused valed ($(stat -c "%a" /var/skriptid/skript2.sh))"
+    fi
+else
+    fail "Fail /var/skriptid/skript2.sh puudub"
+fi
+
+# 15. Kausta /srv/lepingud omanik jyri (grupp muutmata)
+if [ -d "/srv/lepingud" ]; then
+    if [ "$(stat -c "%U" /srv/lepingud)" = "jyri" ]; then
+        ok "Kausta /srv/lepingud omanik jyri"
+    else
+        fail "Kausta /srv/lepingud omanik pole jyri"
+    fi
+else
+    fail "Kaust /srv/lepingud puudub"
+fi
+
+# 16. Kaust /var/vanadfailid SGID
+if [ -d "/var/vanadfailid" ]; then
+    if [ "$(stat -c "%A" /var/vanadfailid)" =~ "s" ]; then
+        ok "Kaust /var/vanadfailid SGID peal"
+    else
+        fail "Kaust /var/vanadfailid SGID puudu"
+    fi
+else
+    fail "Kaust /var/vanadfailid puudub"
+fi
+
+# 17. Kaust /var/avalik sticky bit
+if [ -d "/var/avalik" ]; then
+    if [ "$(stat -c "%A" /var/avalik)" =~ "t" ]; then
+        ok "Kaust /var/avalik sticky bit peal"
+    else
+        fail "Kaust /var/avalik sticky bit puudu"
+    fi
+else
+    fail "Kaust /var/avalik puudub"
+fi
