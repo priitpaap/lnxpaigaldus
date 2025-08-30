@@ -74,4 +74,4 @@ su - student -c "echo '$MARKER See on data1' > ${STUDENT_HOME}/data1.txt"
 su - student -c "echo '$MARKER See on rämps' > ${STUDENT_HOME}/junk"
 su - student -c "rm -f ${STUDENT_HOME}/ajalugu.txt"
 
-echo ">>> Ettevalmistus tehtud! Saad nüüd harjutusega alustada."
+echo ">>> Ettevalmistus tehtud! Saad nüüd ülesandega alustada."
