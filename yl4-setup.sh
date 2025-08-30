@@ -23,7 +23,8 @@ echo ">>> Kustutan failid debian.txt ja käsuajalugu..."
 su - student -c "rm -f ${STUDENT_HOME}/debian.txt"
 su - student -c "history -c"
 
-# Kustuta webmin installifail (kui olemas)
-su - student -c "rm -f ${STUDENT_HOME}/webmin_2.402_all.deb"
+# Lae alla Webmini installifail
+echo ">>> Laen alla Webmini installifaili..."
+su - student -c "wget -O ${STUDENT_HOME}/webmin_2.402_all.deb https://sourceforge.net/projects/webadmin/files/webmin/2.402/webmin_2.402_all.deb/download"
 
 echo ">>> Ettevalmistus tehtud! Saad nüüd ülesandega alustada."
