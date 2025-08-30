@@ -57,4 +57,4 @@ getent group raamatupidajad >/dev/null || groupadd raamatupidajad
 echo "[INFO] Seadistan õigused student kodukausta failidele..."
 chown student:student "$STUDENT_HOME/esimene" "$STUDENT_HOME/teine" "$STUDENT_HOME/backup.sh"
 
-echo "[INFO] Setup valmis!"
+echo "Ettevalmistus tehtud! Saad nüüd ülesandega alustada."
