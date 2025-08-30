@@ -16,7 +16,7 @@ if [ -f "$KODU/esimene" ]; then
     if [ "$(stat -c "%a" $KODU/esimene)" = "660" ]; then
         ok "Fail esimene õigused õiged (660)"
     else
-        fail "Fail esimene õigused valed ($(stat -c "%a" $KODU/esimene))"
+        fail "Fail esimene õigused valed"
     fi
 else
     fail "Fail esimene puudub"
@@ -27,7 +27,7 @@ if [ -f "$KODU/teine" ]; then
     if [ "$(stat -c "%a" $KODU/teine)" = "444" ]; then
         ok "Fail teine õigused õiged (444)"
     else
-        fail "Fail teine õigused valed ($(stat -c "%a" $KODU/teine))"
+        fail "Fail teine õigused valed"
     fi
 else
     fail "Fail teine puudub"
@@ -38,7 +38,7 @@ if [ -f "$KODU/backup.sh" ]; then
     if [ "$(stat -c "%a" $KODU/backup.sh)" = "750" ]; then
         ok "Fail backup.sh õigused õiged (750)"
     else
-        fail "Fail backup.sh õigused valed ($(stat -c "%a" $KODU/backup.sh))"
+        fail "Fail backup.sh õigused valed"
     fi
 else
     fail "Fail backup.sh puudub"
@@ -60,7 +60,7 @@ if [ -d "$KODU/docs" ]; then
     if [ "$(stat -c "%a" $KODU/docs)" = "700" ]; then
         ok "Kaust docs õigused õiged (700)"
     else
-        fail "Kaust docs õigused valed ($(stat -c "%a" $KODU/docs))"
+        fail "Kaust docs õigused valed"
     fi
 else
     fail "Kaust docs puudub"
@@ -72,7 +72,7 @@ if [ -d "/var/failid" ]; then
     if [ "$perms" = "754" ] || [ "$perms" = "2754" ]; then
         ok "Kaust /var/failid õigused õiged (754/2754)"
     else
-        fail "Kaust /var/failid õigused valed ($perms)"
+        fail "Kaust /var/failid õigused valed"
     fi
 else
     fail "Kaust /var/failid puudub"
@@ -117,7 +117,7 @@ if [ -f "/var/skriptid/skript2.sh" ]; then
     if [ "$(stat -c "%a" /var/skriptid/skript2.sh)" = "711" ]; then
         ok "skript2.sh õigused õiged (711)"
     else
-        fail "skript2.sh õigused valed ($(stat -c "%a" /var/skriptid/skript2.sh))"
+        fail "skript2.sh õigused valed"
     fi
 else
     fail "Fail /var/skriptid/skript2.sh puudub"
