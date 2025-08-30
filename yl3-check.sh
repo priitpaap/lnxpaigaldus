@@ -1,8 +1,7 @@
 #!/bin/bash
 
-ok()   { echo "[OK] $1"; }
-fail() { echo "[FAIL] $1"; }
-
+ok()  { echo "✅ $1"; SCORE=$((SCORE+1)); TOTAL=$((TOTAL+1)); }
+fail(){ echo "❌ $1"; TOTAL=$((TOTAL+1)); }
 KODU="/home/student"
 
 # 2. Fail kaustaoigused.txt olemas
