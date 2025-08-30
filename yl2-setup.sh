@@ -51,4 +51,4 @@ for user in "${!EXIST_USERS[@]}"; do
     echo "$MARKER Testfail kasutajale $user" > "$USER_HOME/kasutajad.txt"
 done
 
-echo ">>> Ettevalmistus tehtud! Saad nüüd õppija ülesannet täita."
+echo ">>> Ettevalmistus tehtud! Saad nüüd ülesandega alustada."
