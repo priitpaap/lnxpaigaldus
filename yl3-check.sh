@@ -67,29 +67,39 @@ else
     fail "Kaust docs puudub"
 fi
 
-# 10. Kaust /var/failid õigused 754
+# 10. Kaust /var/failid õigused 754 (+võib olla SGID)
 if [ -d "/var/failid" ]; then
-    if [ "$(stat -c "%a" /var/failid)" = "754" ]; then
-        ok "Kaust /var/failid õigused õiged (754)"
+    perms=$(stat -c "%a" /var/failid)
+    if [ "$perms" = "754" ] || [ "$perms" = "2754" ]; then
+        ok "Kaust /var/failid õigused õiged (754/2754)"
     else
-        fail "Kaust /var/failid õigused valed ($(stat -c "%a" /var/failid))"
+        fail "Kaust /var/failid õigused valed ($perms)"
     fi
 else
     fail "Kaust /var/failid puudub"
 fi
 
-# 11–12. Kausta /var/failid grupp = raamatupidajad ja SGID peal
+# 11. Kontrollime, et kausta /var/failid grupiks on raamatupidajad
 if [ -d "/var/failid" ]; then
     if [ "$(stat -c "%G" /var/failid)" = "raamatupidajad" ]; then
-        if [ "$(stat -c "%a" /var/failid | cut -c1)" = "2" ] || [ "$(stat -c "%A" /var/failid | grep s)" ]; then
-            ok "Kaust /var/failid grupiks raamatupidajad ja SGID olemas"
-        else
-            fail "Kaust /var/failid grupiks raamatupidajad, aga SGID puudub"
-        fi
+        ok "Kaust /var/failid grupiks on raamatupidajad"
     else
         fail "Kausta /var/failid grupp ei ole raamatupidajad"
     fi
+else
+    fail "Kausta /var/failid ei eksisteeri"
 fi
+
+# 12. Kontrollime, et kaustal /var/failid on SGID bitt
+if [ -d "/var/failid" ]; then
+    # %A kuvab õigused tähelistes (nt drwxrwsr-x)
+    if stat -c "%A" /var/failid | grep -q "s"; then
+        ok "Kaustal /var/failid on SGID bitt"
+    else
+        fail "Kaustal /var/failid puudub SGID bitt"
+    fi
+fi
+
 
 # 13. skript1.sh – teised ei tohi käivitada (750 või 770)
 if [ -f "/var/skriptid/skript1.sh" ]; then
