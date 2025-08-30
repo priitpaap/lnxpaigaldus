@@ -155,3 +155,7 @@ if [ -d "/var/avalik" ]; then
 else
     fail "Kaust /var/avalik puudub"
 fi
+
+# --- Kokkuvõte ---
+echo ">>> Kontroll valmis."
+echo "Tulemused: $SCORE / $TOTAL õiget kontrollpunkti."
