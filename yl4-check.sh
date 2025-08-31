@@ -22,6 +22,14 @@ else
   fail "Fail debian.txt puudub"
 fi
 
+# 2. Kontrolli, kas süsteemis pole uuendatavaid pakette
+UPGRADABLE=$(apt list --upgradable 2>/dev/null | grep -v "Listing..." | wc -l)
+if [ "$UPGRADABLE" -eq 0 ]; then
+  ok "Kõik süsteemi paketid on uuendatud"
+else
+  fail "Süsteemis on $UPGRADABLE uuendatavat paketti"
+fi
+
 # 2. Kontrolli, kas uname -a on lisatud
 if grep -q "Linux" "$STUDENT_HOME/debian.txt"; then
   ok "Fail debian.txt sisaldab uname -a väljundit"
