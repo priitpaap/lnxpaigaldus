@@ -30,39 +30,37 @@ else
   fail "Süsteemis on $UPGRADABLE uuendatavat paketti"
 fi
 
-# 3. Kontrolli, kas uname -a on lisatud
+# 3. Kontrolli, kas hosnamectl on lisatud
 if grep -q "Linux" "$STUDENT_HOME/debian.txt"; then
-  ok "Fail debian.txt sisaldab uname -a väljundit"
+  ok "Fail debian.txt sisaldab hostnamectl väljundit"
 else
-  fail "Fail debian.txt ei sisalda uname -a väljundit"
+  fail "Fail debian.txt ei sisalda hostnamectl väljundit"
 fi
 
-# 4. Kontrolli, kas ajalugu on salvestatud
-if grep -q "apt" "$STUDENT_HOME/debian.txt" && grep -q "history" "$STUDENT_HOME/debian.txt"; then
-  ok "Fail debian.txt sisaldab käsuajalugu"
-else
-  fail "Fail debian.txt ei sisalda käsuajalugu"
-fi
-
-# 5. Kontrolli, kas nginx on paigaldatud
+# 4. Kontrolli, kas nginx on paigaldatud
 if dpkg -l | grep -q nginx; then
   ok "Pakk nginx on paigaldatud"
 else
   fail "Pakk nginx ei ole paigaldatud"
 fi
 
-# 6. Kontrolli nginx teenuse tööd
+# 5. Kontrolli nginx teenuse tööd
 if systemctl is-active --quiet nginx; then
   ok "Teenuse nginx staatus on aktiivne"
 else
   fail "Teenuse nginx ei tööta"
 fi
 
-# 7. Kontrolli nginx versiooni olemasolu failis
-if grep -i "nginx" "$STUDENT_HOME/debian.txt" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+'; then
-  ok "Fail debian.txt sisaldab nginx versiooni"
+# 6. Kontrolli, kas nginx versioon on salvestatud debian.txt faili
+if dpkg -l | grep -q nginx; then
+  NGINX_VERSION=$(nginx -v 2>&1 | grep -o '[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+')
+  if grep -q "$NGINX_VERSION" "$STUDENT_HOME/debian.txt"; then
+    ok "Fail debian.txt sisaldab paigaldatud nginx versiooni ($NGINX_VERSION)"
+  else
+    fail "Fail debian.txt ei sisalda paigaldatud nginx versiooni ($NGINX_VERSION)"
+  fi
 else
-  fail "Fail debian.txt ei sisalda nginx versiooni"
+  fail "Pakk nginx ei ole paigaldatud – versiooni kontrolli ei teostatud"
 fi
 
 # 8. Kontrolli, kas mc on eemaldatud
@@ -91,6 +89,13 @@ if [ ! -f "$STUDENT_HOME/webmin_2.402_all.deb" ]; then
   ok "Webmin installifail on eemaldatud"
 else
   fail "Webmin installifail on alles"
+fi
+
+# 4. Kontrolli, kas ajalugu on salvestatud
+if grep -q "apt" "$STUDENT_HOME/debian.txt" && grep -q "history" "$STUDENT_HOME/debian.txt"; then
+  ok "Fail debian.txt sisaldab käsuajalugu"
+else
+  fail "Fail debian.txt ei sisalda käsuajalugu"
 fi
 
 echo ">>> Kontroll valmis."
