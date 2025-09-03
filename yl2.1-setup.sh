@@ -15,13 +15,20 @@ if ! id -u student >/dev/null 2>&1; then
     exit 1
 fi
 
-# --- 1. Loo vajalik grupp 'salajane' suure GID-ga (nt 5500) ---
+# --- 1. Loo vajalik grupp 'salajane' juhusliku GID-ga vahemikus 5500-6000 ---
+
 if ! grep -q '^salajane:' /etc/group; then
-    groupadd -g 5500 salajane
-    echo "Loodi grupp 'salajane' GID=5500"
+    while true; do
+        GID=$((RANDOM % 501 + 5500))  # juhuslik arv 5500-6000
+        if ! getent group "$GID" >/dev/null; then
+            groupadd -g "$GID" salajane
+            break
+        fi
+    done
 else
     echo "Grupp 'salajane' juba olemas, jätan vahele."
 fi
+
 
 # --- 2. /var/skriptid: loo 25 skripti ---
 mkdir -p /var/skriptid
@@ -75,3 +82,4 @@ su - student -c "echo '$MARKER See on rämps' > ${STUDENT_HOME}/junk"
 su - student -c "rm -f ${STUDENT_HOME}/ajalugu.txt"
 
 echo ">>> Ettevalmistus tehtud! Saad nüüd ülesandega alustada."
+
