@@ -12,12 +12,12 @@ fail(){ echo "❌ $1"; TOTAL=$((TOTAL+1)); }
 
 echo ">>> Alustan kontrolli..."
 
-# 1. Kontrolli, kas ajalugu pole puhastatud (ajalugu.txt peab sisaldama käskusid hiljem)
+# 1. Kontrolli, kas ajalugu.txt on loodud ja sisaldab hostnamectl käsku
 if [ -f "$STUDENT_HOME/ajalugu.txt" ]; then
-    if grep -q "load average" "$STUDENT_HOME/ajalugu.txt"; then
-        ok "Fail ajalugu.txt sisaldab uptime käske"
+    if grep -q "Linux" "$STUDENT_HOME/ajalugu.txt"; then
+        ok "Fail ajalugu.txt sisaldab hostnamectl käsku"
     else
-        fail "Fail ajalugu.txt puudub või ei sisalda uptime käske"
+        fail "Fail ajalugu.txt puudub või ei sisalda hostnamectl käsku"
     fi
 else
     fail "Fail ajalugu.txt puudub"
