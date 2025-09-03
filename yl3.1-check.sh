@@ -5,12 +5,12 @@ ok()  { echo "✅ $1"; SCORE=$((SCORE+1)); TOTAL=$((TOTAL+1)); }
 fail(){ echo "❌ $1"; TOTAL=$((TOTAL+1)); }
 KODU="/home/student"
 
-# 2. Kas fail kasutajad.txt on olemas ja algab uptime väljundiga
+# 2. Kas fail kasutajad.txt on olemas ja algab hostnamectl väljundiga
 if [ -f "$KODU/kasutajad.txt" ]; then
-    if grep -q "load average" kasutajad.txt; then
-        ok "Fail kasutajad.txt olemas ja sisaldab uptime väljundit"
+    if grep -q "Linux" kasutajad.txt; then
+        ok "Fail kasutajad.txt olemas ja sisaldab hostnamectl väljundit"
     else
-        fail "Fail kasutajad.txt olemas, kuid ei sisalda uptime väljundit"
+        fail "Fail kasutajad.txt olemas, kuid ei sisalda hostnamectl väljundit"
     fi
 else
     fail "Fail kasutajad.txt puudub"
@@ -154,4 +154,4 @@ fi
 
 # --- Kokkuvõte ---
 echo ">>> Kontroll valmis."
-echo "Tulemused: $SCORE / $TOTAL õiget kontrollpunkti."
+echo "Tulemused: $SCORE / $TOTAL õiget tulemust."
