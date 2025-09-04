@@ -83,7 +83,7 @@ else
 fi
 
 # 10. Jyri parooli muutust ei saa skriptiga kontrollida → ainult märge
-ok "Jyri parooli muutust ei saa kahjuks skriptiga kontrollida, loodan, et tegid selle 'sudo passwd jyri' käsuga"
+ok "Jyri parooli muutust pole võimalik skriptiga kontrollida - õige käsk oli 'sudo passwd jyri'"
 
 # 11. Kas kasutaja teenus olemas ja tal pole parooli
 if id teenus &>/dev/null; then
