@@ -47,10 +47,14 @@ else
 fi
 
 # 6. Jyri sudo/wheel grupis
-if id -nG jyri | grep -Eq '\bsudo\b|\bwheel\b' &> /dev/null; then
-    ok "Kasutaja jyri on sudo/wheel grupis"
+if id -nG jyri &>/dev/null; then
+    if id -nG jyri | grep -Eq '\bsudo\b|\bwheel\b'; then
+        ok "Kasutaja jyri on sudo/wheel grupis"
+    else
+        fail "Kasutaja jyri ei ole sudo/wheel grupis"
+    fi
 else
-    fail "Kasutaja jyri ei ole sudo/wheel grupis"
+    fail "Kasutajat jyri ei eksisteeri"
 fi
 
 # 7. Jyri.txt olemas ja sisaldab tema gruppe
