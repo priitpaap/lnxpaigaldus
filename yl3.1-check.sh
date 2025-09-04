@@ -150,10 +150,14 @@ else
 fi
 
 # 16. Kas kasutajad.txt lõpus on history väljund
-if tail -n 10 kasutajad.txt &> /dev/null | grep -q "history" ; then
-    ok "Fail kasutajad.txt lõpus on history väljund"
+if [ -f kasutajad.txt ]; then
+    if tail -n 10 kasutajad.txt | grep -q "history"; then
+        ok "Faili kasutajad.txt lõpus on history väljund"
+    else
+        fail "Faili kasutajad.txt lõpus pole history väljundit"
+    fi
 else
-    fail "Faili kasutajad.txt lõpus pole history väljundit või faili kasutajad.txt ei leitud"
+    fail "Faili kasutajad.txt ei leitud"
 fi
 
 # --- Kokkuvõte ---
