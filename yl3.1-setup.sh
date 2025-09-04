@@ -11,7 +11,6 @@ echo ">>> Alustan kasutajate halduse harjutuse ettevalmistust..."
 for grp in raamatupidajad ajutine; do
     if ! getent group "$grp" >/dev/null; then
         groupadd "$grp"
-        echo "Loodi grupp: $grp"
     else
         echo "Grupp $grp juba olemas"
     fi
