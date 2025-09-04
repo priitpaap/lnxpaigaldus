@@ -47,7 +47,7 @@ else
 fi
 
 # 6. Jyri sudo/wheel grupis
-if id -nG jyri | grep -Eq '\bsudo\b|\bwheel\b'; then
+if id -nG jyri | grep -Eq '\bsudo\b|\bwheel\b' &> /dev/null; then
     ok "Kasutaja jyri on sudo/wheel grupis"
 else
     fail "Kasutaja jyri ei ole sudo/wheel grupis"
@@ -146,10 +146,10 @@ else
 fi
 
 # 16. Kas kasutajad.txt lõpus on history väljund
-if tail -n 10 kasutajad.txt | grep -q "history"; then
+if tail -n 10 kasutajad.txt | grep -q "history" &> /dev/null; then
     ok "Fail kasutajad.txt lõpus on history väljund"
 else
-    fail "Fail kasutajad.txt lõpus pole history väljundit"
+    fail "Faili kasutajad.txt lõpus pole history väljundit või faili kasutajad.txt ei leitud"
 fi
 
 # --- Kokkuvõte ---
