@@ -19,7 +19,7 @@ done
 
 # --- 2. Loo olemasolevad kasutajad ---
 declare -A EXIST_USERS
-EXIST_USERS=( ["pille"]="raamatupidajad" ["kalmer"]="" ["sektetar"]="" )
+EXIST_USERS=( ["pille"]="raamatupidajad" ["kalmer"]="" ["sekretar"]="" )
 
 for user in "${!EXIST_USERS[@]}"; do
     if ! id "$user" >/dev/null 2>&1; then
@@ -29,7 +29,6 @@ for user in "${!EXIST_USERS[@]}"; do
         if [ -n "${EXIST_USERS[$user]}" ]; then
             usermod -aG "${EXIST_USERS[$user]}" "$user"
         fi
-        echo "Loodi kasutaja: $user"
     else
         echo "Kasutaja $user juba olemas"
     fi
