@@ -148,4 +148,4 @@ fi
 
 # --- Kokkuvõte ---
 echo ">>> Kontroll valmis."
-echo "Tulemused: $SCORE / $TOTAL õiget kontrollpunkti."
+echo "Tulemused: $SCORE / $TOTAL õiget tulemust."
