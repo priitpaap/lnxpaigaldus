@@ -4,9 +4,13 @@ ok()  { echo "✅ $1"; SCORE=$((SCORE+1)); TOTAL=$((TOTAL+1)); }
 fail(){ echo "❌ $1"; TOTAL=$((TOTAL+1)); }
 KODU="/home/student"
 
-# 2. Fail kaustaoigused.txt olemas
+# 2. Kas fail kaustaoigused.txt on olemas ja algab hostnamectl väljundiga
 if [ -f "$KODU/kaustaoigused.txt" ]; then
-    ok "Fail kaustaoigused.txt olemas"
+    if grep -q "Linux" kaustaoigused.txt; then
+        ok "Fail kaustaoigused.txt olemas ja sisaldab hostnamectl väljundit"
+    else
+        fail "Fail kaustaoigused.txt olemas, kuid ei sisalda hostnamectl väljundit"
+    fi
 else
     fail "Fail kaustaoigused.txt puudub"
 fi
