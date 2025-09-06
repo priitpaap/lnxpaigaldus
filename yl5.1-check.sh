@@ -30,7 +30,7 @@ else
   fail "Süsteemis on $UPGRADABLE uuendatavat paketti"
 fi
 
-# 4. Kontrolli nginx paketti ja teenust
+# 3. Kontrolli nginx paketti ja teenust
 if dpkg -l | grep -q nginx; then
   ok "Pakk nginx on paigaldatud"
   if systemctl is-active --quiet nginx; then
@@ -42,42 +42,42 @@ else
   fail "Pakk nginx ei ole paigaldatud"
 fi
 
-# 5. Kontrolli nginx.txt faili olemasolu
+# 4. Kontrolli nginx.txt faili olemasolu
 if [ -f "$STUDENT_HOME/nginx.txt" ] && grep -q "Package: nginx" "$STUDENT_HOME/nginx.txt"; then
   ok "Fail nginx.txt olemas ja sisaldab paki infot"
 else
   fail "Fail nginx.txt puudub või ei sisalda õiget infot"
 fi
 
-# 6. Kontrolli depends.txt faili olemasolu
+# 5. Kontrolli depends.txt faili olemasolu
 if [ -f "$STUDENT_HOME/depends.txt" ] && grep -qi "Depends" "$STUDENT_HOME/depends.txt"; then
   ok "Fail depends.txt olemas ja sisaldab sõltuvusi"
 else
   fail "Fail depends.txt puudub või ei sisalda sõltuvusi"
 fi
 
-# 7. Kontrolli, kas mc on paigaldatud
+# 6. Kontrolli, kas mc on paigaldatud
 if dpkg -l | grep -q mc; then
   ok "Pakk mc on paigaldatud"
 else
   fail "Pakk mc ei ole paigaldatud"
 fi
 
-# 8. Kontrolli, kas bind9 on eemaldatud
+# 7. Kontrolli, kas bind9 on eemaldatud
 if ! dpkg -l | grep -q bind9; then
   ok "Pakk bind9 on eemaldatud"
 else
   fail "Pakk bind9 on endiselt paigaldatud"
 fi
 
-# 9. Kontrolli, kas fortune-mod on paigaldatud
+# 8. Kontrolli, kas fortune-mod on paigaldatud
 if dpkg -l | grep -q fortune-mod; then
   ok "Pakk fortune-mod on paigaldatud"
 else
   fail "Pakk fortune-mod ei ole paigaldatud"
 fi
 
-# 10. Kontrolli, kas webmin on paigaldatud ja deb-fail eemaldatud
+# 9. Kontrolli, kas webmin on paigaldatud ja deb-fail eemaldatud
 if dpkg -l | grep -q webmin; then
   ok "Pakk webmin on paigaldatud"
 else
@@ -89,7 +89,7 @@ else
   fail "Webmin installifail on alles"
 fi
 
-# 11. Kontrolli, kas ajalugu on salvestatud
+# 10. Kontrolli, kas ajalugu on salvestatud
 if [ -f "$STUDENT_HOME/debian.txt" ]; then
   if grep -q "apt" "$STUDENT_HOME/debian.txt" && grep -q "history" "$STUDENT_HOME/debian.txt"; then
     ok "Fail debian.txt sisaldab käsuajalugu"
