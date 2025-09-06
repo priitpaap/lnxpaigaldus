@@ -1,6 +1,6 @@
 #!/bin/bash
-# setup.sh - ettevalmistusskript Debian tarkvarahalduse ülesande jaoks
-# Käivita root kasutajana (nt sudo ./setup.sh)
+# yl5.1-setup.sh - ettevalmistus Debian tarkvarahalduse ülesande jaoks
+# Käivita root kasutajana (nt sudo ./yl5.1-setup.sh)
 
 set -e
 
@@ -14,13 +14,17 @@ if ! id -u student >/dev/null 2>&1; then
 fi
 
 # Eemalda paketid, mis võivad olla eelnevalt paigaldatud
-echo ">>> Eemaldan paketid nginx, mc, fortune-mod, webmin (kui olemas)..."
-apt purge -y nginx mc fortune-mod || true
+echo ">>> Eemaldan paketid nginx, mc, fortune-mod, webmin, bind9 (kui olemas)..."
+apt purge -y nginx mc fortune-mod bind9 || true
 dpkg -r webmin || true
 
-# Kustuta debian.txt ja ajalugu
-echo ">>> Kustutan failid debian.txt ja käsuajalugu..."
-su - student -c "rm -f ${STUDENT_HOME}/debian.txt"
+# Puhasta
+apt autoremove -y || true
+apt clean || true
+
+# Kustuta failid ja käsuajalugu
+echo ">>> Kustutan failid debian.txt, nginx.txt, depends.txt ja käsuajalugu..."
+su - student -c "rm -f ${STUDENT_HOME}/debian.txt ${STUDENT_HOME}/nginx.txt ${STUDENT_HOME}/depends.txt"
 su - student -c "history -c"
 
 # Lae alla Webmini installifail
