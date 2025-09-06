@@ -11,16 +11,15 @@ fail(){ echo "❌ $1"; TOTAL=$((TOTAL+1)); }
 
 echo ">>> Alustan kontrolli..."
 
-# 1. Fail debian.txt olemas ja sisaldab uptime kahte korda
-if [ -f "$STUDENT_HOME/debian.txt" ]; then
-  UPTIME_COUNT=$(grep -c "load average" "$STUDENT_HOME/debian.txt")
-  if [ "$UPTIME_COUNT" -ge 2 ]; then
-    ok "Fail debian.txt sisaldab kahte uptime väljundit"
-  else
-    fail "Fail debian.txt ei sisalda kahte uptime väljundit"
-  fi
+# 1. Kas fail debian.txt on olemas ja algab hostnamectl väljundiga
+if [ -f "$KODU/debian.txt" ]; then
+    if grep -q "Linux" debian.txt; then
+        ok "Fail debian.txt olemas ja sisaldab hostnamectl väljundit"
+    else
+        fail "Fail debian.txt olemas, kuid ei sisalda hostnamectl väljundit"
+    fi
 else
-  fail "Fail debian.txt puudub"
+    fail "Fail debian.txt puudub"
 fi
 
 # 2. Kontrolli, kas süsteemis pole uuendatavaid pakette
