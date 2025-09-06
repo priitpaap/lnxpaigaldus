@@ -1,6 +1,6 @@
 #!/bin/bash
-# yl4-check.sh - kontrollib õppija tegevusi Debian tarkvarahalduse ülesandes
-# Käivita root kasutajana (nt sudo ./yl4-check.sh)
+# yl5.1-check.sh - kontrollib õppija tegevusi Debian tarkvarahalduse ülesandes
+# Käivita root kasutajana (nt sudo ./yl5.1-check.sh)
 
 STUDENT_HOME="/home/student"
 TOTAL=0
@@ -11,12 +11,13 @@ fail(){ echo "❌ $1"; TOTAL=$((TOTAL+1)); }
 
 echo ">>> Alustan kontrolli..."
 
-# 1. Fail debian.txt olemas ja sisaldab uptime
+# 1. Fail debian.txt olemas ja sisaldab uptime kahte korda
 if [ -f "$STUDENT_HOME/debian.txt" ]; then
-  if grep -q "load average" "$STUDENT_HOME/debian.txt"; then
-    ok "Fail debian.txt sisaldab uptime väljundit"
+  UPTIME_COUNT=$(grep -c "load average" "$STUDENT_HOME/debian.txt")
+  if [ "$UPTIME_COUNT" -ge 2 ]; then
+    ok "Fail debian.txt sisaldab kahte uptime väljundit"
   else
-    fail "Fail debian.txt olemas, kuid ei sisalda uptime väljundit"
+    fail "Fail debian.txt ei sisalda kahte uptime väljundit"
   fi
 else
   fail "Fail debian.txt puudub"
@@ -30,44 +31,51 @@ else
   fail "Süsteemis on $UPGRADABLE uuendatavat paketti"
 fi
 
-# 3. Kontrolli, kas hosnamectl on lisatud
+# 3. Kontrolli, kas hostnamectl väljund lisati
 if grep -q "Linux" "$STUDENT_HOME/debian.txt"; then
   ok "Fail debian.txt sisaldab hostnamectl väljundit"
 else
   fail "Fail debian.txt ei sisalda hostnamectl väljundit"
 fi
 
-# 4. Kontrolli, kas nginx on paigaldatud
+# 4. Kontrolli nginx paketti ja teenust
 if dpkg -l | grep -q nginx; then
   ok "Pakk nginx on paigaldatud"
+  if systemctl is-active --quiet nginx; then
+    ok "Teenuse nginx staatus on aktiivne"
+  else
+    fail "Teenuse nginx ei tööta"
+  fi
 else
   fail "Pakk nginx ei ole paigaldatud"
 fi
 
-# 5. Kontrolli nginx teenuse tööd
-if systemctl is-active --quiet nginx; then
-  ok "Teenuse nginx staatus on aktiivne"
+# 5. Kontrolli nginx.txt faili olemasolu
+if [ -f "$STUDENT_HOME/nginx.txt" ] && grep -q "Package: nginx" "$STUDENT_HOME/nginx.txt"; then
+  ok "Fail nginx.txt olemas ja sisaldab paki infot"
 else
-  fail "Teenuse nginx ei tööta"
+  fail "Fail nginx.txt puudub või ei sisalda õiget infot"
 fi
 
-# 6. Kontrolli, kas nginx versioon on salvestatud debian.txt faili
-if dpkg -l | grep -q nginx; then
-  NGINX_VERSION=$(nginx -v 2>&1 | grep -o '[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+')
-  if grep -q "$NGINX_VERSION" "$STUDENT_HOME/debian.txt"; then
-    ok "Fail debian.txt sisaldab paigaldatud nginx versiooni ($NGINX_VERSION)"
-  else
-    fail "Fail debian.txt ei sisalda paigaldatud nginx versiooni ($NGINX_VERSION)"
-  fi
+# 6. Kontrolli depends.txt faili olemasolu
+if [ -f "$STUDENT_HOME/depends.txt" ] && grep -qi "Depends" "$STUDENT_HOME/depends.txt"; then
+  ok "Fail depends.txt olemas ja sisaldab sõltuvusi"
 else
-  fail "Pakk nginx ei ole paigaldatud – versiooni kontrolli ei teostatud"
+  fail "Fail depends.txt puudub või ei sisalda sõltuvusi"
 fi
 
-# 8. Kontrolli, kas mc on eemaldatud
-if ! dpkg -l | grep -q mc; then
-  ok "Pakk mc on eemaldatud"
+# 7. Kontrolli, kas mc on paigaldatud
+if dpkg -l | grep -q mc; then
+  ok "Pakk mc on paigaldatud"
 else
-  fail "Pakk mc on endiselt paigaldatud"
+  fail "Pakk mc ei ole paigaldatud"
+fi
+
+# 8. Kontrolli, kas bind9 on eemaldatud
+if ! dpkg -l | grep -q bind9; then
+  ok "Pakk bind9 on eemaldatud"
+else
+  fail "Pakk bind9 on endiselt paigaldatud"
 fi
 
 # 9. Kontrolli, kas fortune-mod on paigaldatud
@@ -77,21 +85,19 @@ else
   fail "Pakk fortune-mod ei ole paigaldatud"
 fi
 
-# 10. Kontrolli, kas webmin on paigaldatud
+# 10. Kontrolli, kas webmin on paigaldatud ja deb-fail eemaldatud
 if dpkg -l | grep -q webmin; then
   ok "Pakk webmin on paigaldatud"
 else
   fail "Pakk webmin ei ole paigaldatud"
 fi
-
-# 11. Kontrolli, kas webmin installifail on eemaldatud
 if [ ! -f "$STUDENT_HOME/webmin_2.402_all.deb" ]; then
   ok "Webmin installifail on eemaldatud"
 else
   fail "Webmin installifail on alles"
 fi
 
-# 4. Kontrolli, kas ajalugu on salvestatud
+# 11. Kontrolli, kas ajalugu on salvestatud
 if grep -q "apt" "$STUDENT_HOME/debian.txt" && grep -q "history" "$STUDENT_HOME/debian.txt"; then
   ok "Fail debian.txt sisaldab käsuajalugu"
 else
