@@ -32,10 +32,14 @@ else
 fi
 
 # 3. Kontrolli, kas hostnamectl väljund lisati
-if grep -q "Linux" "$STUDENT_HOME/debian.txt"; then
-  ok "Fail debian.txt sisaldab hostnamectl väljundit"
+if [ -f "$STUDENT_HOME/debian.txt" ]; then
+  if grep -q "Linux" "$STUDENT_HOME/debian.txt"; then
+    ok "Fail debian.txt sisaldab hostnamectl väljundit"
+  else
+    fail "Fail debian.txt ei sisalda hostnamectl väljundit"
+  fi
 else
-  fail "Fail debian.txt ei sisalda hostnamectl väljundit"
+  fail "Fail debian.txt puudub"
 fi
 
 # 4. Kontrolli nginx paketti ja teenust
@@ -98,10 +102,14 @@ else
 fi
 
 # 11. Kontrolli, kas ajalugu on salvestatud
-if grep -q "apt" "$STUDENT_HOME/debian.txt" && grep -q "history" "$STUDENT_HOME/debian.txt"; then
-  ok "Fail debian.txt sisaldab käsuajalugu"
+if [ -f "$STUDENT_HOME/debian.txt" ]; then
+  if grep -q "apt" "$STUDENT_HOME/debian.txt" && grep -q "history" "$STUDENT_HOME/debian.txt"; then
+    ok "Fail debian.txt sisaldab käsuajalugu"
+  else
+    fail "Fail debian.txt ei sisalda käsuajalugu"
+  fi
 else
-  fail "Fail debian.txt ei sisalda käsuajalugu"
+  fail "Fail debian.txt puudub"
 fi
 
 echo ">>> Kontroll valmis."
