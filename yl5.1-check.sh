@@ -12,7 +12,7 @@ fail(){ echo "❌ $1"; TOTAL=$((TOTAL+1)); }
 echo ">>> Alustan kontrolli..."
 
 # 1. Kas fail debian.txt on olemas ja algab hostnamectl väljundiga
-if [ -f "$KODU/debian.txt" ]; then
+if [ -f "$STUDENT_HOME/debian.txt" ]; then
     if grep -q "Linux" debian.txt; then
         ok "Fail debian.txt olemas ja sisaldab hostnamectl väljundit"
     else
@@ -28,17 +28,6 @@ if [ "$UPGRADABLE" -eq 0 ]; then
   ok "Kõik süsteemi paketid on uuendatud"
 else
   fail "Süsteemis on $UPGRADABLE uuendatavat paketti"
-fi
-
-# 3. Kontrolli, kas hostnamectl väljund lisati
-if [ -f "$STUDENT_HOME/debian.txt" ]; then
-  if grep -q "Linux" "$STUDENT_HOME/debian.txt"; then
-    ok "Fail debian.txt sisaldab hostnamectl väljundit"
-  else
-    fail "Fail debian.txt ei sisalda hostnamectl väljundit"
-  fi
-else
-  fail "Fail debian.txt puudub"
 fi
 
 # 4. Kontrolli nginx paketti ja teenust
@@ -112,4 +101,4 @@ else
 fi
 
 echo ">>> Kontroll valmis."
-echo "Tulemused: $SCORE / $TOTAL õiget kontrollpunkti."
+echo "Tulemused: $SCORE / $TOTAL õiget tulemust."
