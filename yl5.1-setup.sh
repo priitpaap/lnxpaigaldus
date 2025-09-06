@@ -14,21 +14,18 @@ if ! id -u student >/dev/null 2>&1; then
 fi
 
 # Eemalda paketid, mis võivad olla eelnevalt paigaldatud
-echo ">>> Eemaldan paketid nginx, mc, fortune-mod, webmin, bind9 (kui olemas)..."
-apt purge -y nginx mc fortune-mod bind9 || true
-dpkg -r webmin || true
+apt purge -y nginx mc fortune-mod bind9 >/dev/null 2>&1 || true
+dpkg -r webmin >/dev/null 2>&1 || true
 
 # Puhasta
-apt autoremove -y || true
-apt clean || true
+apt autoremove -y >/dev/null 2>&1 || true
+apt clean >/dev/null 2>&1 || true
 
 # Kustuta failid ja käsuajalugu
-echo ">>> Kustutan failid debian.txt, nginx.txt, depends.txt ja käsuajalugu..."
-su - student -c "rm -f ${STUDENT_HOME}/debian.txt ${STUDENT_HOME}/nginx.txt ${STUDENT_HOME}/depends.txt"
-su - student -c "history -c"
+su - student -c "rm -f ${STUDENT_HOME}/debian.txt ${STUDENT_HOME}/nginx.txt ${STUDENT_HOME}/depends.txt" >/dev/null 2>&1
+su - student -c "history -c" >/dev/null 2>&1
 
-# Lae alla Webmini installifail
-echo ">>> Laen alla Webmini installifaili..."
-su - student -c "wget -O ${STUDENT_HOME}/webmin_2.402_all.deb https://sourceforge.net/projects/webadmin/files/webmin/2.402/webmin_2.402_all.deb/download"
+# Lae alla Webmini installifail (wget väljastaks muidu infot)
+su - student -c "wget -q -O ${STUDENT_HOME}/webmin_2.402_all.deb https://sourceforge.net/projects/webadmin/files/webmin/2.402/webmin_2.402_all.deb/download" >/dev/null 2>&1
 
 echo ">>> Ettevalmistus tehtud! Saad nüüd ülesandega alustada."
