@@ -78,9 +78,9 @@ fi
 
 # 7. Kontrolli, kas bind9 on eemaldatud
 if dpkg-query -W -f='${Status}\n' bind9 2>/dev/null | grep -q '^install ok installed$'; then
-  ok "Pakk bind9 on veel eemaldamata"
+  fail "Pakk bind9 on veel eemaldamata"
 else
-  fail "Pakk bind9 on eemaldatud"
+  ok "Pakk bind9 on eemaldatud"
 fi
 
 # 8. Kontrolli, kas fortune-mod on paigaldatud
