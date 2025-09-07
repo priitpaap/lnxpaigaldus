@@ -14,12 +14,15 @@ if ! id -u student >/dev/null 2>&1; then
 fi
 
 # Eemalda paketid, mis võivad olla eelnevalt paigaldatud
-apt purge -y nginx mc fortune-mod bind9 >/dev/null 2>&1 || true
+apt purge -y nginx mc fortune-mod >/dev/null 2>&1 || true
 dpkg -r webmin >/dev/null 2>&1 || true
 
 # Puhasta
 apt autoremove -y >/dev/null 2>&1 || true
 apt clean >/dev/null 2>&1 || true
+
+# Paigalda bind9
+apt install -y bind9 >/dev/null 2>&1 || true
 
 # Kustuta failid ja käsuajalugu
 su - student -c "rm -f ${STUDENT_HOME}/debian.txt ${STUDENT_HOME}/nginx.txt ${STUDENT_HOME}/depends.txt" >/dev/null 2>&1
