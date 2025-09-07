@@ -102,7 +102,15 @@ else
   fail "Webmin installifail on alles"
 fi
 
-# 10. Kontrolli, kas ajalugu on salvestatud
+# 10. Kontrolli, kas süsteem on autoremove abil puhastatud
+AUTOREMOVE_COUNT=$(apt autoremove -s 2>/dev/null | grep -c "Remv")
+if [ "$AUTOREMOVE_COUNT" -eq 0 ]; then
+  ok "Süsteem on puhastatud – autoremove ei leia kasutuid pakke"
+else
+  fail "Süsteem pole puhastatud on veel $AUTOREMOVE_COUNT paketti, mida saaks autoremove'iga eemaldada"
+fi
+
+# 11. Kontrolli, kas ajalugu on salvestatud
 if [ -f "$STUDENT_HOME/debian.txt" ]; then
   if grep -q "apt" "$STUDENT_HOME/debian.txt" && grep -q "history" "$STUDENT_HOME/debian.txt"; then
     ok "Fail debian.txt sisaldab käsuajalugu"
