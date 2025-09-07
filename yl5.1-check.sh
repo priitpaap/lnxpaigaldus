@@ -47,9 +47,9 @@ if [ -f "$STUDENT_HOME/nginx.txt" ]; then
   if dpkg -s nginx >/dev/null 2>&1; then
     NGINX_VERSION=$(dpkg -s nginx | grep '^Version:' | awk '{print $2}')
     if grep -q "$NGINX_VERSION" "$STUDENT_HOME/nginx.txt"; then
-      ok "Fail nginx.txt sisaldab paigaldatud nginx versiooni ($NGINX_VERSION)"
+      ok "Fail nginx.txt sisaldab paigaldatud nginx versiooni"
     else
-      fail "Fail nginx.txt ei sisalda paigaldatud nginx versiooni ($NGINX_VERSION)"
+      fail "Fail nginx.txt ei sisalda paigaldatud nginx versiooni"
     fi
   else
     fail "Nginx ei ole paigaldatud – ei saa kontrollida versiooni"
@@ -58,11 +58,15 @@ else
   fail "Fail nginx.txt puudub"
 fi
 
-# 5. Kontrolli depends.txt faili olemasolu
-if [ -f "$STUDENT_HOME/depends.txt" ] && grep -qi "Depends" "$STUDENT_HOME/depends.txt"; then
-  ok "Fail depends.txt olemas ja sisaldab sõltuvusi"
+# 5. Kontrolli depends.txt faili olemasolu ja libc6 sõltuvust
+if [ -f "$STUDENT_HOME/depends.txt" ]; then
+  if grep -q "libc6" "$STUDENT_HOME/depends.txt"; then
+    ok "Fail depends.txt olemas ja sisaldab sõltuvusi"
+  else
+    fail "Fail depends.txt olemas, kuid ei sisalda sõltuvusi"
+  fi
 else
-  fail "Fail depends.txt puudub või ei sisalda sõltuvusi"
+  fail "Fail depends.txt puudub"
 fi
 
 # 6. Kontrolli, kas mc on paigaldatud
