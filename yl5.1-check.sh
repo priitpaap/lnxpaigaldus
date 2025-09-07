@@ -42,11 +42,20 @@ else
   fail "Pakk nginx ei ole paigaldatud"
 fi
 
-# 4. Kontrolli nginx.txt faili olemasolu
-if [ -f "$STUDENT_HOME/nginx.txt" ] && grep -q "Package: nginx" "$STUDENT_HOME/nginx.txt"; then
-  ok "Fail nginx.txt olemas ja sisaldab paki infot"
+# 4. Kontrolli nginx.txt faili olemasolu ja versiooni
+if [ -f "$STUDENT_HOME/nginx.txt" ]; then
+  if dpkg -s nginx >/dev/null 2>&1; then
+    NGINX_VERSION=$(dpkg -s nginx | grep '^Version:' | awk '{print $2}')
+    if grep -q "$NGINX_VERSION" "$STUDENT_HOME/nginx.txt"; then
+      ok "Fail nginx.txt sisaldab paigaldatud nginx versiooni ($NGINX_VERSION)"
+    else
+      fail "Fail nginx.txt ei sisalda paigaldatud nginx versiooni ($NGINX_VERSION)"
+    fi
+  else
+    fail "Nginx ei ole paigaldatud – ei saa kontrollida versiooni"
+  fi
 else
-  fail "Fail nginx.txt puudub või ei sisalda õiget infot"
+  fail "Fail nginx.txt puudub"
 fi
 
 # 5. Kontrolli depends.txt faili olemasolu
