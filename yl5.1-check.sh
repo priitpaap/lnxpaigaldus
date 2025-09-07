@@ -69,8 +69,8 @@ else
   fail "Fail depends.txt puudub"
 fi
 
-# 6. Kontrolli, kas mc on paigaldatud
-if dpkg -l | grep -q mc; then
+# 6. Kontrolli, kas mc on paigaldatud (täpne ja vaikne)
+if dpkg-query -W -f='${Status}\n' mc 2>/dev/null | grep -q '^install ok installed$'; then
   ok "Pakk mc on paigaldatud"
 else
   fail "Pakk mc ei ole paigaldatud"
