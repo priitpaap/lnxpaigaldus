@@ -83,15 +83,15 @@ else
   ok "Pakk bind9 on eemaldatud"
 fi
 
-# 8. Kontrolli, kas fortune-mod on paigaldatud
-if dpkg -l | grep -q fortune-mod; then
-  ok "Pakk fortune-mod on paigaldatud"
+# 8. Kontrolli, kas mc on paigaldatud
+if dpkg-query -W -f='${Status}\n' fortune-mod 2>/dev/null | grep -q '^install ok installed$'; then
+  ok "Õige fortune pakk on paigaldatud"
 else
-  fail "Pakk fortune-mod ei ole paigaldatud"
+  fail "Õige fortune pakk ei ole paigaldatud"
 fi
 
 # 9. Kontrolli, kas webmin on paigaldatud ja deb-fail eemaldatud
-if dpkg -l | grep -q webmin; then
+if dpkg-query -W -f='${Status}\n' webmin 2>/dev/null | grep -q '^install ok installed$'; then
   ok "Pakk webmin on paigaldatud"
 else
   fail "Pakk webmin ei ole paigaldatud"
