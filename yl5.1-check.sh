@@ -69,7 +69,7 @@ else
   fail "Fail depends.txt puudub"
 fi
 
-# 6. Kontrolli, kas mc on paigaldatud (täpne ja vaikne)
+# 6. Kontrolli, kas mc on paigaldatud
 if dpkg-query -W -f='${Status}\n' mc 2>/dev/null | grep -q '^install ok installed$'; then
   ok "Pakk mc on paigaldatud"
 else
@@ -77,10 +77,10 @@ else
 fi
 
 # 7. Kontrolli, kas bind9 on eemaldatud
-if ! dpkg -l | grep -q bind9; then
-  ok "Pakk bind9 on eemaldatud"
+if dpkg-query -W -f='${Status}\n' bind9 2>/dev/null | grep -q '^install ok installed$'; then
+  ok "Pakk bind9 on veel eemaldamata"
 else
-  fail "Pakk bind9 on endiselt paigaldatud"
+  fail "Pakk bind9 on eemaldatud"
 fi
 
 # 8. Kontrolli, kas fortune-mod on paigaldatud
