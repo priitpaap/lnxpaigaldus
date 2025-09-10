@@ -23,12 +23,16 @@ else
 fi
 
 # 2. Kontrolli, kas süsteemis pole uuendatavaid pakette
-UPDATES=$(dnf check-update --quiet; echo $?)
-if [ "$UPDATES" -eq 0 ]; then
+dnf check-update -q >/dev/null 2>&1
+RC=$?
+if [ "$RC" -eq 0 ]; then
   ok "Kõik süsteemi paketid on uuendatud"
-else
+elif [ "$RC" -eq 100 ]; then
   fail "Süsteemis on uuendatavaid pakette"
+else
+  fail "Pakettide uuenduste kontroll ebaõnnestus (võrguprobleem või repo viga)"
 fi
+
 
 # 3. Kontrolli httpd paketti ja teenust
 if rpm -q httpd >/dev/null 2>&1; then
