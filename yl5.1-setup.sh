@@ -29,6 +29,6 @@ su - student -c "rm -f ${STUDENT_HOME}/debian.txt ${STUDENT_HOME}/nginx.txt ${ST
 su - student -c "history -c" >/dev/null 2>&1
 
 # Lae alla Webmini installifail (wget väljastaks muidu infot)
-su - student -c "wget -q -O ${STUDENT_HOME}/webmin_2.402_all.deb https://sourceforge.net/projects/webadmin/files/webmin/2.402/webmin_2.402_all.deb/download" >/dev/null 2>&1
+su - student -c "wget -q -O ${STUDENT_HOME}/webmin_2.501_all.deb https://sourceforge.net/projects/webadmin/files/webmin/2.501/webmin_2.501_all.deb/download" >/dev/null 2>&1
 
 echo ">>> Ettevalmistus tehtud! Saad nüüd ülesandega alustada."
