@@ -22,7 +22,7 @@ apt autoremove -y >/dev/null 2>&1 || true
 apt clean >/dev/null 2>&1 || true
 
 # Paigalda bind9
-apt install -y bind9 >/dev/null 2>&1 || true
+dnf install -y samba >/dev/null 2>&1 || true
 
 # Kustuta failid ja käsuajalugu
 su - student -c "rm -f ${STUDENT_HOME}/debian.txt ${STUDENT_HOME}/nginx.txt ${STUDENT_HOME}/depends.txt" >/dev/null 2>&1
