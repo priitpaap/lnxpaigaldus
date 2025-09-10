@@ -46,6 +46,7 @@ rpm -q webmin >/dev/null 2>&1 && rpm -e webmin >/dev/null 2>&1 || true
 runuser -u student -- bash -lc "rm -f '${STUDENT_HOME}/alma.txt' '${STUDENT_HOME}/httpd.txt' '${STUDENT_HOME}/depends.txt' || true"
 runuser -u student -- bash -lc "rm -f ~/.bash_history; : > ~/.bash_history 2>/dev/null || true"
 
-
+# 8) Lae alla Webmini installifail (wget väljastaks muidu infot)
+su - student -c "wget -q -O ${STUDENT_HOME}/webmin-2.501-1.noarch.rpm https://sourceforge.net/projects/webadmin/files/webmin/2.501/webmin-2.501-1.noarch.rpm/download" >/dev/null 2>&1
 
 echo ">>> Ettevalmistus tehtud! Saad nüüd ülesandega alustada."
