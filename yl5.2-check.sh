@@ -1,6 +1,6 @@
 #!/bin/bash
-# yl5.1-check.sh - kontrollib õppija tegevusi Debian tarkvarahalduse ülesandes
-# Käivita root kasutajana (nt sudo ./yl5.1-check.sh)
+# yl5.2-check.sh - kontrollib õppija tegevusi Alma Linux tarkvarahalduse ülesandes
+# Käivita root kasutajana (nt sudo ./yl5.2-check.sh)
 
 STUDENT_HOME="/home/student"
 TOTAL=0
@@ -11,114 +11,109 @@ fail(){ echo "❌ $1"; TOTAL=$((TOTAL+1)); }
 
 echo ">>> Alustan kontrolli..."
 
-# 1. Kas fail debian.txt on olemas ja algab hostnamectl väljundiga
-if [ -f "$STUDENT_HOME/debian.txt" ]; then
-    if grep -q "Linux" debian.txt; then
-        ok "Fail debian.txt olemas ja sisaldab hostnamectl väljundit"
-    else
-        fail "Fail debian.txt olemas, kuid ei sisalda hostnamectl väljundit"
-    fi
+# 1. Fail alma.txt olemas ja sisaldab hostnamectl väljundit
+if [ -f "$STUDENT_HOME/alma.txt" ]; then
+  if grep -q "Linux" "$STUDENT_HOME/alma.txt"; then
+    ok "Fail alma.txt olemas ja sisaldab hostnamectl väljundit"
+  else
+    fail "Fail alma.txt olemas, kuid ei sisalda hostnamectl väljundit"
+  fi
 else
-    fail "Fail debian.txt puudub"
+  fail "Fail alma.txt puudub"
 fi
 
 # 2. Kontrolli, kas süsteemis pole uuendatavaid pakette
-UPGRADABLE=$(apt list --upgradable 2>/dev/null | grep -v "Listing..." | wc -l)
-if [ "$UPGRADABLE" -eq 0 ]; then
+UPDATES=$(dnf check-update --quiet; echo $?)
+if [ "$UPDATES" -eq 0 ]; then
   ok "Kõik süsteemi paketid on uuendatud"
 else
-  fail "Süsteemis on $UPGRADABLE uuendatavat paketti"
+  fail "Süsteemis on uuendatavaid pakette"
 fi
 
-# 3. Kontrolli nginx paketti ja teenust
-if dpkg -l | grep -q nginx; then
-  ok "Pakk nginx on paigaldatud"
-  if systemctl is-active --quiet nginx; then
-    ok "Teenuse nginx staatus on aktiivne"
+# 3. Kontrolli httpd paketti ja teenust
+if rpm -q httpd >/dev/null 2>&1; then
+  ok "Pakk httpd on paigaldatud"
+  if systemctl is-active --quiet httpd; then
+    ok "Teenuse httpd staatus on aktiivne"
   else
-    fail "Teenuse nginx ei tööta"
+    fail "Teenuse httpd ei tööta"
   fi
 else
-  fail "Pakk nginx ei ole paigaldatud"
+  fail "Pakk httpd ei ole paigaldatud"
 fi
 
-# 4. Kontrolli nginx.txt faili olemasolu ja versiooni
-if [ -f "$STUDENT_HOME/nginx.txt" ]; then
-  if dpkg -s nginx >/dev/null 2>&1; then
-    NGINX_VERSION=$(dpkg -s nginx | grep '^Version:' | awk '{print $2}')
-    if grep -q "$NGINX_VERSION" "$STUDENT_HOME/nginx.txt"; then
-      ok "Fail nginx.txt sisaldab paigaldatud nginx versiooni"
-    else
-      fail "Fail nginx.txt ei sisalda paigaldatud nginx versiooni"
-    fi
+# 4. Kontrolli httpd.txt faili ja versiooni
+if [ -f "$STUDENT_HOME/httpd.txt" ]; then
+  VERSION=$(rpm -q httpd)
+  if grep -q "$VERSION" "$STUDENT_HOME/httpd.txt"; then
+    ok "Fail httpd.txt sisaldab paigaldatud httpd versiooni"
   else
-    fail "Nginx ei ole paigaldatud – ei saa kontrollida versiooni"
+    fail "Fail httpd.txt ei sisalda paigaldatud httpd versiooni"
   fi
 else
-  fail "Fail nginx.txt puudub"
+  fail "Fail httpd.txt puudub"
 fi
 
-# 5. Kontrolli depends.txt faili olemasolu ja libc6 sõltuvust
+# 5. Kontrolli depends.txt faili ja libc (või systemd-libs) sõltuvust
 if [ -f "$STUDENT_HOME/depends.txt" ]; then
-  if grep -q "libc6" "$STUDENT_HOME/depends.txt"; then
-    ok "Fail depends.txt olemas ja sisaldab sõltuvusi"
+  if grep -q "systemd" "$STUDENT_HOME/depends.txt"; then
+    ok "Fail depends.txt sisaldab sõltuvusi"
   else
-    fail "Fail depends.txt olemas, kuid ei sisalda sõltuvusi"
+    fail "Fail depends.txt olemas, kuid ei sisalda ootuspärast sõltuvust"
   fi
 else
   fail "Fail depends.txt puudub"
 fi
 
-# 6. Kontrolli, kas mc on paigaldatud
-if dpkg-query -W -f='${Status}\n' mc 2>/dev/null | grep -q '^install ok installed$'; then
-  ok "Pakk mc on paigaldatud"
+# 6. Kontrolli, kas epel-release on paigaldatud
+if rpm -q epel-release >/dev/null 2>&1; then
+  ok "EPEL repositoorium on lisatud (epel-release on paigaldatud)"
 else
-  fail "Pakk mc ei ole paigaldatud"
+  fail "EPEL repositoorium pole lisatud"
 fi
 
-# 7. Kontrolli, kas bind9 on eemaldatud
-if dpkg-query -W -f='${Status}\n' bind9 2>/dev/null | grep -q '^install ok installed$'; then
-  fail "Pakk bind9 on veel eemaldamata"
+# 7. Kontrolli, kas toilet on paigaldatud
+if rpm -q toilet >/dev/null 2>&1; then
+  ok "Pakk toilet on paigaldatud"
 else
-  ok "Pakk bind9 on eemaldatud"
+  fail "Pakk toilet ei ole paigaldatud"
 fi
 
-# 8. Kontrolli, kas mc on paigaldatud
-if dpkg-query -W -f='${Status}\n' fortune-mod 2>/dev/null | grep -q '^install ok installed$'; then
-  ok "Õige fortune pakk on paigaldatud"
+# 8. Kontrolli, kas samba on eemaldatud
+if rpm -q samba >/dev/null 2>&1; then
+  fail "Pakk samba on veel eemaldamata"
 else
-  fail "Õige fortune pakk ei ole paigaldatud"
+  ok "Pakk samba on eemaldatud"
 fi
 
-# 9. Kontrolli, kas webmin on paigaldatud ja deb-fail eemaldatud
-if dpkg-query -W -f='${Status}\n' webmin 2>/dev/null | grep -q '^install ok installed$'; then
+# 9. Kontrolli, kas nmap on paigaldatud
+if rpm -q nmap >/dev/null 2>&1; then
+  ok "Pakk nmap on paigaldatud"
+else
+  fail "Pakk nmap ei ole paigaldatud"
+fi
+
+# 10. Kontrolli, kas webmin on paigaldatud ja rpm-fail eemaldatud
+if rpm -q webmin >/dev/null 2>&1; then
   ok "Pakk webmin on paigaldatud"
 else
   fail "Pakk webmin ei ole paigaldatud"
 fi
-if [ ! -f "$STUDENT_HOME/webmin_2.402_all.deb" ]; then
+if [ ! -f "$STUDENT_HOME"/webmin*.rpm ]; then
   ok "Webmin installifail on eemaldatud"
 else
   fail "Webmin installifail on alles"
 fi
 
-# 10. Kontrolli, kas süsteem on autoremove abil puhastatud
-AUTOREMOVE_COUNT=$(apt autoremove -s 2>/dev/null | grep -c "Remv")
-if [ "$AUTOREMOVE_COUNT" -eq 0 ]; then
-  ok "Süsteem on puhastatud – autoremove ei leia kasutuid pakke"
-else
-  fail "Süsteem pole puhastatud on veel $AUTOREMOVE_COUNT paketti, mida saaks autoremove'iga eemaldada"
-fi
-
-# 11. Kontrolli, kas ajalugu on salvestatud
-if [ -f "$STUDENT_HOME/debian.txt" ]; then
-  if grep -q "apt" "$STUDENT_HOME/debian.txt" && grep -q "history" "$STUDENT_HOME/debian.txt"; then
-    ok "Fail debian.txt sisaldab käsuajalugu"
+# 11. Kontrolli, kas ajalugu ja uptime on salvestatud
+if [ -f "$STUDENT_HOME/alma.txt" ]; then
+  if grep -q "history" "$STUDENT_HOME/alma.txt" && grep -q "load average" "$STUDENT_HOME/alma.txt"; then
+    ok "Fail alma.txt sisaldab käsuajalugu ja uptime väljundit"
   else
-    fail "Fail debian.txt ei sisalda käsuajalugu"
+    fail "Fail alma.txt ei sisalda käsuajalugu või uptime väljundit"
   fi
 else
-  fail "Fail debian.txt puudub"
+  fail "Fail alma.txt puudub"
 fi
 
 echo ">>> Kontroll valmis."
