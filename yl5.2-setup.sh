@@ -28,9 +28,6 @@ fi
 STUDENT_HOME="$(getent passwd student | cut -d: -f6)"
 STUDENT_HOME="${STUDENT_HOME:-/home/student}"
 
-echo ">>> Kasutan paketihaldurit: ${DNF_BIN}"
-echo ">>> Student HOME: ${STUDENT_HOME}"
-
 # 4) Eemalda võimalikke eelnevaid pakette (vaikides; vead ei peata)
 "${DNF_BIN}" -y remove nginx mc fortune-mod webmin >/dev/null 2>&1 || true
 rpm -q webmin >/dev/null 2>&1 && rpm -e webmin >/dev/null 2>&1 || true
