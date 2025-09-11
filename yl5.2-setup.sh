@@ -7,6 +7,7 @@ set -euo pipefail
 trap 'echo "✖ Viga: katkestati real $LINENO"; exit 1' ERR
 
 echo ">>> Alustan harjutuse ettevalmistust..."
+echo ">>> Oota, see võtab natuke aega..."
 
 # 1) Kontrolli, et skript jookseb root'ina
 if [[ $EUID -ne 0 ]]; then
