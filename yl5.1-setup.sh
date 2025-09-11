@@ -6,6 +6,7 @@ set -e
 
 STUDENT_HOME="/home/student"
 echo ">>> Alustan harjutuse ettevalmistust..."
+echo ">>> Oota, see võtab natuke aega..."
 
 # Kontrolli, et kasutaja student eksisteeriks
 if ! id -u student >/dev/null 2>&1; then
