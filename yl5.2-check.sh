@@ -48,11 +48,11 @@ fi
 
 # 4. Kontrolli httpd.txt faili ja versiooni
 if [ -f "$STUDENT_HOME/httpd.txt" ]; then
-  VERSION=$(rpm -q httpd)
+  VERSION=$(dnf info httpd 2>/dev/null | grep '^Version' | awk '{print $3}')
   if grep -q "$VERSION" "$STUDENT_HOME/httpd.txt"; then
-    ok "Fail httpd.txt sisaldab paigaldatud httpd versiooni"
+    ok "Fail httpd.txt sisaldab paigaldatud httpd versiooni ($VERSION)"
   else
-    fail "Fail httpd.txt ei sisalda paigaldatud httpd versiooni"
+    fail "Fail httpd.txt ei sisalda paigaldatud httpd versiooni ($VERSION)"
   fi
 else
   fail "Fail httpd.txt puudub"
