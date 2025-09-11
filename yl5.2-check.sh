@@ -50,9 +50,9 @@ fi
 if [ -f "$STUDENT_HOME/httpd.txt" ]; then
   VERSION=$(dnf info httpd 2>/dev/null | grep '^Version' | awk '{print $3}')
   if grep -q "$VERSION" "$STUDENT_HOME/httpd.txt"; then
-    ok "Fail httpd.txt sisaldab paigaldatud httpd versiooni ($VERSION)"
+    ok "Fail httpd.txt sisaldab paigaldatud httpd versiooni"
   else
-    fail "Fail httpd.txt ei sisalda paigaldatud httpd versiooni ($VERSION)"
+    fail "Fail httpd.txt ei sisalda paigaldatud httpd versiooni"
   fi
 else
   fail "Fail httpd.txt puudub"
