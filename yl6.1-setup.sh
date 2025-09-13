@@ -19,6 +19,12 @@ if ! id -u peeter >/dev/null 2>&1; then
   echo "peeter:peeter" | chpasswd
 fi
 
+# Loo kasutaja pille, kui teda ei ole
+if ! id -u pille >/dev/null 2>&1; then
+  useradd -m pille
+  echo "pille:pille" | chpasswd
+fi
+
 # Loo failid /etc kausta kus sisaldub sõna "abiline"
 mkdir -p /etc/local
 mkdir -p /etc/X81
@@ -37,6 +43,17 @@ echo "Aenean varius ante feugiat lacus hendrerit aliquam." > /usr/local/secure/s
 chown peeter:peeter /usr/local/games/xml_file.txt
 chown peeter:peeter /usr/local/share/log/log1.log
 chown peeter:peeter /usr/local/secure/secure.conf
+
+# Loo /usr alla kaustad, mis kuuluvad pillele
+mkdir -p /usr/kst
+mkdir -p /usr/local/share/itune
+mkdir -p /usr/local/books
+echo "Lorem ipsum dolor sit amet, consectetur adipiscing elit." > /usr/kst/file1.txt
+echo "Fusce lacus purus, auctor ac ante ut, euismod lacinia nisi." > /usr/local/share/itune/log2.log
+echo "Aenean varius ante feugiat lacus hendrerit aliquam." > /usr/local/books/book1.log
+chown -R pille:pille /usr/local/kst
+chown -R pille:pille /usr/local/share/itune
+chown -R pille:pille /usr/local/books
 
 # Loo /var/logbackup ja lisa 100 logifaili
 mkdir -p /var/logbackup
