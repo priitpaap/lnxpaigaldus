@@ -81,6 +81,23 @@ for i in $(seq 1 15); do
   echo "Error logifail $i" > /var/oldlogs/error${i}.log
 done
 
+# Loo /var/backups kaust suurte failide testimiseks
+mkdir -p /var/backups
+
+# Loo mõned väiksemad failid (< 300 MB)
+dd if=/dev/zero of=/var/backups/small1.bin bs=1M count=10 status=none
+dd if=/dev/zero of=/var/backups/small2.bin bs=1M count=50 status=none
+dd if=/dev/zero of=/var/backups/small3.bin bs=1M count=100 status=none
+
+# Loo mõned suured failid (> 300 MB)
+dd if=/dev/zero of=/var/backups/big1.bin bs=1M count=350 status=none
+dd if=/dev/zero of=/var/log/big2.bin bs=1M count=500 status=none
+
+# Loo 235 tavalist faili
+for i in $(seq 1 235); do
+  echo "Fail $i" > /var/backups/file${i}.bin
+done
+
 # Paigalda vajadusel ka openssh-server
 if ! dpkg -s openssh-server >/dev/null 2>&1; then
   apt-get install -y openssh-server >/dev/null 2>&1
