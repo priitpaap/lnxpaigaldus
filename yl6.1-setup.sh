@@ -103,6 +103,12 @@ if ! dpkg -s openssh-server >/dev/null 2>&1; then
   apt-get install -y openssh-server >/dev/null 2>&1
 fi
 
+# Paigalda rsyslog
+apt install -y rsyslog >/dev/null 2>&1 || true
+
+# Paigalda isc-dhcp-server
+apt install -y isc-dhcp-server >/dev/null 2>&1 || true
+
 # Kustuta võimalikud vanad failid õppija kodukaustast
 su - student -c "rm -f ${STUDENT_HOME}/k2sud.txt ${STUDENT_HOME}/abiline.txt ${STUDENT_HOME}/peeter.txt ${STUDENT_HOME}/logid.txt ${STUDENT_HOME}/ssh.txt"
 
