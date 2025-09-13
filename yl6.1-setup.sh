@@ -19,7 +19,7 @@ if ! id -u peeter >/dev/null 2>&1; then
   echo "peeter:peeter" | chpasswd
 fi
 
-# Loo fail /etc kausta sõnaga "abiline"
+# Loo failid /etc kausta kus sisaldub sõna "abiline"
 mkdir -p /etc/local
 mkdir -p /etc/X81
 echo "Siin see abiline peidus ongi!" > /etc/logcontrol.conf
@@ -28,10 +28,18 @@ echo "Samuti võib Abiline alata suure tähega!" > /etc/uboot.conf
 echo "Siin see on seeAbilinEkogemata kirjutatud sõna sisse!" > /etc/X81/notaguifile.conf
 
 # Loo /usr/local alla kaust ja failid, mis kuuluvad peeterile
-mkdir -p /usr/local/peeter_files
-echo "Peetri fail" > /usr/local/peeter_files/test1.txt
-echo "Veel üks Peetri fail" > /usr/local/peeter_files/test2.txt
-chown -R peeter:peeter /usr/local/peeter_files
+mkdir -p /usr/local/games
+mkdir -p /usr/local/share/log
+mkdir -p /usr/local/secure
+echo "Lorem ipsum dolor sit amet, consectetur adipiscing elit." > /usr/local/games/xml_file.txt
+echo "Fusce lacus purus, auctor ac ante ut, euismod lacinia nisi." > /usr/local/share/log/log1.log
+echo "Aenean varius ante feugiat lacus hendrerit aliquam." > /usr/local/secure/secure.conf
+chown -R peeter:peeter /usr/local/games/xml_file.txt
+chown -R peeter:peeter /usr/local/share/log/log1.log
+chown -R peeter:peeter /usr/local/secure/secure.conf
+
+
+
 
 # Loo /var/logbackup ja lisa vanad failid (muuda kuupäev 6 a tagasi)
 mkdir -p /var/logbackup
