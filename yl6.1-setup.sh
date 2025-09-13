@@ -51,7 +51,7 @@ mkdir -p /usr/local/books
 echo "Lorem ipsum dolor sit amet, consectetur adipiscing elit." > /usr/kst/file1.txt
 echo "Fusce lacus purus, auctor ac ante ut, euismod lacinia nisi." > /usr/local/share/itune/log2.log
 echo "Aenean varius ante feugiat lacus hendrerit aliquam." > /usr/local/books/book1.log
-chown -R pille:pille /usr/local/kst
+chown -R pille:pille /usr/kst
 chown -R pille:pille /usr/local/share/itune
 chown -R pille:pille /usr/local/books
 
@@ -110,7 +110,17 @@ apt install -y rsyslog >/dev/null 2>&1 || true
 apt install -y isc-dhcp-server >/dev/null 2>&1 || true
 
 # Kustuta võimalikud vanad failid õppija kodukaustast
-su - student -c "rm -f ${STUDENT_HOME}/k2sud.txt ${STUDENT_HOME}/abiline.txt ${STUDENT_HOME}/peeter.txt ${STUDENT_HOME}/logid.txt ${STUDENT_HOME}/ssh.txt"
+su - student -c "rm -f \
+  ${STUDENT_HOME}/abiline.txt \
+  ${STUDENT_HOME}/peeter.txt \
+  ${STUDENT_HOME}/pille.txt \
+  ${STUDENT_HOME}/logid.txt \
+  ${STUDENT_HOME}/ssh.txt \
+  ${STUDENT_HOME}/ss.txt \
+  ${STUDENT_HOME}/failed.txt \
+  ${STUDENT_HOME}/big.txt \
+  ${STUDENT_HOME}/suured.txt \
+  ${STUDENT_HOME}/k2sud.txt"
 
 # Tühjenda käsuajalugu
 su - student -c "history -c" >/dev/null 2>&1
