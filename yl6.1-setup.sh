@@ -64,10 +64,18 @@ for i in $(seq 1 15); do
   echo "Error logifail $i" > /var/oldlogs/error${i}.log
 done
 
+# Paigalda vajadusel ka openssh-server
+if ! dpkg -s openssh-server >/dev/null 2>&1; then
+  apt-get install -y openssh-server >/dev/null 2>&1
+fi
+
 # Kustuta võimalikud vanad failid õppija kodukaustast
 su - student -c "rm -f ${STUDENT_HOME}/k2sud.txt ${STUDENT_HOME}/abiline.txt ${STUDENT_HOME}/peeter.txt ${STUDENT_HOME}/logid.txt ${STUDENT_HOME}/ssh.txt"
 
 # Tühjenda käsuajalugu
 su - student -c "history -c" >/dev/null 2>&1
+
+# Loo /srv/programmid
+mkdir -p /srv/programmid
 
 echo ">>> Ettevalmistus tehtud! Saad nüüd ülesandega alustada."
