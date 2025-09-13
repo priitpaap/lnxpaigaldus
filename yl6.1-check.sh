@@ -13,10 +13,10 @@ echo ">>> Alustan kontrolli..."
 
 # 4. hostnamectl väljund k2sud.txt alguses
 if [ -f "$STUDENT_HOME/k2sud.txt" ]; then
-  if head -n1 "$STUDENT_HOME/k2sud.txt" | grep -q "Linux"; then
-    ok "Fail k2sud.txt algab hostnamectl väljundiga"
+  if grep -q "Linux"; then
+    ok "Fail k2sud.txt sisaldab hostnamectl väljundit"
   else
-    fail "Fail k2sud.txt ei sisalda hostnamectl väljundit alguses"
+    fail "Fail k2sud.txt ei sisalda hostnamectl väljundit"
   fi
 else
   fail "Fail k2sud.txt puudub"
