@@ -20,7 +20,12 @@ if ! id -u peeter >/dev/null 2>&1; then
 fi
 
 # Loo fail /etc kausta sõnaga "abiline"
-echo "See on abiline testfail" > /etc/abiline.conf
+mkdir -p /etc/local
+mkdir -p /etc/X81
+echo "Siin see abiline peidus ongi!" > /etc/logcontrol.conf
+echo "Vahest on ABILINE kirjutatud ka suurelt!" > /etc/local/system.conf
+echo "Samuti võib Abiline alata suure tähega!" > /etc/uboot.conf
+echo "Siin see on seeAbilinEkogemata kirjutatud sõna sisse!" > /etc/X81/notaguifile.conf
 
 # Loo /usr/local alla kaust ja failid, mis kuuluvad peeterile
 mkdir -p /usr/local/peeter_files
