@@ -51,10 +51,18 @@ touch -d "6 years ago" /var/logbackup/file40.log
 touch -d "6 years ago" /var/logbackup/file60.log
 touch -d "6 years ago" /var/logbackup/file80.log
 
-# Loo /var alla error.log failid
-mkdir -p /var/test1 /var/test2
-echo "Error1" > /var/test1/error.log
-echo "Error2" > /var/test2/error.log
+# Loo /var/oldlogs kaust ja lisa 250 logifaili
+mkdir -p /var/oldlogs
+
+# Loo 235 tavalist logifaili
+for i in $(seq 1 235); do
+  echo "Logifail $i" > /var/oldlogs/file${i}.log
+done
+
+# Loo 15 error logifaili
+for i in $(seq 1 15); do
+  echo "Error logifail $i" > /var/oldlogs/error${i}.log
+done
 
 # Kustuta võimalikud vanad failid õppija kodukaustast
 su - student -c "rm -f ${STUDENT_HOME}/k2sud.txt ${STUDENT_HOME}/abiline.txt ${STUDENT_HOME}/peeter.txt ${STUDENT_HOME}/logid.txt ${STUDENT_HOME}/ssh.txt"
