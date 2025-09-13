@@ -38,12 +38,18 @@ chown peeter:peeter /usr/local/games/xml_file.txt
 chown peeter:peeter /usr/local/share/log/log1.log
 chown peeter:peeter /usr/local/secure/secure.conf
 
-# Loo /var/logbackup ja lisa vanad failid (muuda kuupäev 6 a tagasi)
+# Loo /var/logbackup ja lisa 100 logifaili
 mkdir -p /var/logbackup
-echo "Vana logifail" > /var/logbackup/old1.log
-echo "Teine vana logifail" > /var/logbackup/old2.log
-# Muudame ajatempli 6 aastat tagasi
-touch -d "6 years ago" /var/logbackup/*.log
+for i in $(seq 1 100); do
+  echo "Logifail $i" > /var/logbackup/file${i}.log
+done
+
+# Määra 5 kindlat faili vanemaks kui 5 aastat
+touch -d "6 years ago" /var/logbackup/file1.log
+touch -d "6 years ago" /var/logbackup/file20.log
+touch -d "6 years ago" /var/logbackup/file40.log
+touch -d "6 years ago" /var/logbackup/file60.log
+touch -d "6 years ago" /var/logbackup/file80.log
 
 # Loo /var alla error.log failid
 mkdir -p /var/test1 /var/test2
