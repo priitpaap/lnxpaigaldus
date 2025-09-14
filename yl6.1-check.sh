@@ -22,12 +22,25 @@ else
   fail "Fail k2sud.txt puudub"
 fi
 
-# 5. abiline.txt – peab sisaldama ainult /etc failide nimesid kus sõna abiline
+# 5. abiline.txt – peab sisaldama kõigi peidetud failide nimesid
 if [ -f "$STUDENT_HOME/abiline.txt" ]; then
-  if grep -qi "abiline" "$STUDENT_HOME/abiline.txt"; then
-    ok "Fail abiline.txt sisaldab sõnaga 'abiline' leitud ridu"
+  FILES=(
+    "/etc/logcontrol.conf"
+    "/etc/local/system.conf"
+    "/etc/uboot.conf"
+    "/etc/X81/notaguifile.conf"
+  )
+  ALL_FOUND=true
+  for f in "${FILES[@]}"; do
+    if ! grep -q "$f" "$STUDENT_HOME/abiline.txt"; then
+      echo "❌ Fail abiline.txt ei sisalda $f"
+      ALL_FOUND=false
+    fi
+  done
+  if $ALL_FOUND; then
+    ok "Fail abiline.txt sisaldab kõiki peidetud abiline-faile"
   else
-    fail "Fail abiline.txt ei sisalda sõnaga 'abiline' ridu"
+    fail "Fail abiline.txt ei sisalda kõiki vajalikke ridu"
   fi
 else
   fail "Fail abiline.txt puudub"
