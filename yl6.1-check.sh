@@ -150,7 +150,28 @@ else
   fail "Fail ssh.txt puudub"
 fi
 
-# 10. alias list püsiv
+# 8. ssh.txt – peab sisaldama ssh_config faili asukohta
+if [ -f "$STUDENT_HOME/ssh.txt" ]; then
+  FILES=(
+    "/etc/ssh/ssh_config"
+    "/etc/ssh/ssh_config.d"
+  )
+  ALL_FOUND=true
+  for f in "${FILES[@]}"; do
+    if ! grep -q "$f" "$STUDENT_HOME/ssh.txt"; then
+      ALL_FOUND=false
+    fi
+  done
+  if $ALL_FOUND; then
+    ok "Fail ssh.txt sisaldab kõiki ssh_config faili asukohti"
+  else
+    fail "Fail ssh.txt ei sisalda kõiki ssh_config faili asukohti"
+  fi
+else
+  fail "Fail ssh.txt puudub"
+fi
+
+# 9. alias list püsiv
 if su - student -c "alias list" >/dev/null 2>&1; then
   if su - student -c "alias list" | grep -q "ls -la"; then
     ok "Alias 'list' on määratud ja püsiv"
