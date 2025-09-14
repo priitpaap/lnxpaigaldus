@@ -131,7 +131,7 @@ if [ -f "$STUDENT_HOME/logid.txt" ]; then
     fi
   done
   if $ALL_FOUND; then
-    ok "Fail logid.txt sisaldab kõiki 5 vanemat logifaili"
+    ok "Fail logid.txt sisaldab kõiki vanemaid logifaile"
   else
     fail "Fail logid.txt ei sisalda kõiki vajalikke ridu"
   fi
