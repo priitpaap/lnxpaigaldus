@@ -93,6 +93,28 @@ else
   fail "Fail peeter.txt puudub"
 fi
 
+# 6. pille.txt – peab sisaldama kõiki pille kasutajale kuuluvaid kaustu
+if [ -f "$STUDENT_HOME/pille.txt" ]; then
+  DIRS=(
+    "/usr/kst"
+    "/usr/local/share/itune"
+    "/usr/local/books"
+  )
+  ALL_FOUND=true
+  for d in "${DIRS[@]}"; do
+    if ! grep -q "$d" "$STUDENT_HOME/pille.txt"; then
+      ALL_FOUND=false
+    fi
+  done
+  if $ALL_FOUND; then
+    ok "Fail pille.txt sisaldab kõiki pille kasutajale kuuluvaid kaustu"
+  else
+    fail "Fail pille.txt ei sisalda kõiki vajalikke katalooge"
+  fi
+else
+  fail "Fail pille.txt puudub"
+fi
+
 
 # 7. logid.txt – peab sisaldama 5 vana faili
 if [ -f "$STUDENT_HOME/logid.txt" ]; then
