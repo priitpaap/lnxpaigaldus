@@ -11,7 +11,7 @@ fail(){ echo "❌ $1"; TOTAL=$((TOTAL+1)); }
 
 echo ">>> Alustan kontrolli..."
 
-# 4. hostnamectl väljund k2sud.txt alguses
+# 1. hostnamectl väljund k2sud.txt alguses
 if [ -f "$STUDENT_HOME/k2sud.txt" ]; then
   if grep -q "Linux" "$STUDENT_HOME/k2sud.txt"; then
     ok "Fail k2sud.txt sisaldab hostnamectl väljundit"
@@ -22,7 +22,7 @@ else
   fail "Fail k2sud.txt puudub"
 fi
 
-# 5. abiline.txt – peab sisaldama kõigi peidetud failide nimesid
+# 2. abiline.txt – peab sisaldama kõigi peidetud failide nimesid
 if [ -f "$STUDENT_HOME/abiline.txt" ]; then
   FILES=(
     "/etc/logcontrol.conf"
@@ -45,7 +45,7 @@ else
   fail "Fail abiline.txt puudub"
 fi
 
-# 17. failed.txt – syslogi read peavad sisaldama 'Failed' ja 'isc-dhcp-server'
+# 3. failed.txt – syslogi read peavad sisaldama 'Failed' ja 'isc-dhcp-server'
 if [ -f "$STUDENT_HOME/failed.txt" ]; then
   if grep -qi "Failed" "$STUDENT_HOME/failed.txt" && grep -qi "isc-dhcp-server" "$STUDENT_HOME/failed.txt"; then
     ok "Fail failed.txt sisaldab 'Failed' ridu isc-dhcp-server teenuse kohta"
@@ -55,6 +55,22 @@ if [ -f "$STUDENT_HOME/failed.txt" ]; then
 else
   fail "Fail failed.txt puudub"
 fi
+
+# 4. ss.txt – peab sisaldama ainult ssh ridu, mitte kogu ss väljundit
+if [ -f "$STUDENT_HOME/ss.txt" ]; then
+  if grep -q "ssh" "$STUDENT_HOME/ss.txt"; then
+    if grep -q "Port" "$STUDENT_HOME/ss.txt"; then
+      fail "Fail ss.txt sisaldab vaid filtreerimata ss käsu tulemust"
+    else
+      ok "Fail ss.txt sisaldab ainult filtreeritud ssh ridu"
+    fi
+  else
+    fail "Fail ss.txt ei sisalda ssh ridu"
+  fi
+else
+  fail "Fail ss.txt puudub"
+fi
+
 
 # 6. peeter.txt – peab sisaldama /usr/local alt peetrile kuuluvaid faile
 if [ -f "$STUDENT_HOME/peeter.txt" ]; then
