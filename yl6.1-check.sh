@@ -37,7 +37,7 @@ if [ -f "$STUDENT_HOME/abiline.txt" ]; then
     fi
   done
   if $ALL_FOUND; then
-    ok "Fail abiline.txt sisaldab kõiki peidetud abiline-faile"
+    ok "Fail abiline.txt sisaldab kõiki /etc kauta faile, kus leidub sõna 'abiline'"
   else
     fail "Fail abiline.txt ei sisalda kõiki vajalikke ridu"
   fi
