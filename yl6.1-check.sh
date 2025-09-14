@@ -33,7 +33,6 @@ if [ -f "$STUDENT_HOME/abiline.txt" ]; then
   ALL_FOUND=true
   for f in "${FILES[@]}"; do
     if ! grep -q "$f" "$STUDENT_HOME/abiline.txt"; then
-      echo "❌ Fail abiline.txt ei sisalda $f"
       ALL_FOUND=false
     fi
   done
