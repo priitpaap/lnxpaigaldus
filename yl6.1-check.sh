@@ -71,17 +71,28 @@ else
   fail "Fail ss.txt puudub"
 fi
 
-
-# 6. peeter.txt – peab sisaldama /usr/local alt peetrile kuuluvaid faile
+# 5. peeter.txt – peab sisaldama kõiki peetrile kuuluvaid faile
 if [ -f "$STUDENT_HOME/peeter.txt" ]; then
-  if grep -q "/usr/local/peeter_files" "$STUDENT_HOME/peeter.txt"; then
-    ok "Fail peeter.txt sisaldab peetri failide nimesid"
+  FILES=(
+    "/usr/local/games/xml_file.txt"
+    "/usr/local/share/log/log1.log"
+    "/usr/local/secure/secure.conf"
+  )
+  ALL_FOUND=true
+  for f in "${FILES[@]}"; do
+    if ! grep -q "$f" "$STUDENT_HOME/peeter.txt"; then
+      ALL_FOUND=false
+    fi
+  done
+  if $ALL_FOUND; then
+    ok "Fail peeter.txt sisaldab kõiki peetrile kuuluvaid faile"
   else
-    fail "Fail peeter.txt ei sisalda peetri faile"
+    fail "Fail peeter.txt ei sisalda kõiki vajalikke ridu"
   fi
 else
   fail "Fail peeter.txt puudub"
 fi
+
 
 # 7. logid.txt – peab sisaldama 5 vana faili
 if [ -f "$STUDENT_HOME/logid.txt" ]; then
