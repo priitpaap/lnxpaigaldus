@@ -139,7 +139,7 @@ else
   fail "Fail logid.txt puudub"
 fi
 
-# 8. ssh.txt – peab sisaldama ssh_config faili asukohta
+# 8. ssh.txt – peab sisaldama ssh_config faili asukohti
 if [ -f "$STUDENT_HOME/ssh.txt" ]; then
   FILES=(
     "/etc/ssh/ssh_config"
@@ -171,7 +171,7 @@ else
   fail "Alias 'list' puudub"
 fi
 
-# 11. alias vlo püsiv
+# 10. alias vlo püsiv
 if su - student -c "alias vlo" >/dev/null 2>&1; then
   if su - student -c "alias vlo" | grep -q "cd /var/log"; then
     ok "Alias 'vlo' on määratud ja püsiv"
@@ -182,28 +182,28 @@ else
   fail "Alias 'vlo' puudub"
 fi
 
-# 12. cowsay paigaldatud
+# 11. cowsay paigaldatud
 if dpkg -s cowsay >/dev/null 2>&1; then
   ok "Pakk cowsay on paigaldatud"
 else
   fail "Pakk cowsay ei ole paigaldatud"
 fi
 
-# 13. .bashrc sisaldab cowsay tervitust
+# 12. .bashrc sisaldab cowsay tervitust
 if grep -q "cowsay" "$STUDENT_HOME/.bashrc"; then
   ok ".bashrc sisaldab cowsay tervitust"
 else
   fail ".bashrc ei sisalda cowsay tervitust"
 fi
 
-# 14. PATH sisaldab /var/programmid
+# 13. PATH sisaldab /var/programmid
 if su - student -c "echo \$PATH" | grep -q "/var/programmid"; then
   ok "PATH sisaldab kataloogi /var/programmid"
 else
   fail "PATH ei sisalda kataloogi /var/programmid"
 fi
 
-# 15. uptime lisatud k2sud.txt lõppu
+# 14. uptime lisatud k2sud.txt lõppu
 if [ -f "$STUDENT_HOME/k2sud.txt" ]; then
   if tail -n1 "$STUDENT_HOME/k2sud.txt" | grep -q "load average"; then
     ok "Fail k2sud.txt lõpeb uptime väljundiga"
