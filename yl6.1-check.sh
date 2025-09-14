@@ -141,17 +141,6 @@ fi
 
 # 8. ssh.txt – peab sisaldama ssh_config faili asukohta
 if [ -f "$STUDENT_HOME/ssh.txt" ]; then
-  if grep -q "ssh_config" "$STUDENT_HOME/ssh.txt"; then
-    ok "Fail ssh.txt sisaldab ssh_config faili asukohta"
-  else
-    fail "Fail ssh.txt ei sisalda ssh_config asukohta"
-  fi
-else
-  fail "Fail ssh.txt puudub"
-fi
-
-# 8. ssh.txt – peab sisaldama ssh_config faili asukohta
-if [ -f "$STUDENT_HOME/ssh.txt" ]; then
   FILES=(
     "/etc/ssh/ssh_config"
     "/etc/ssh/ssh_config.d"
