@@ -115,20 +115,31 @@ else
   fail "Fail pille.txt puudub"
 fi
 
-
-# 7. logid.txt – peab sisaldama 5 vana faili
+# 7. logid.txt – peab sisaldama setupis vanaks tehtud 5 faili
 if [ -f "$STUDENT_HOME/logid.txt" ]; then
-  COUNT=$(wc -l < "$STUDENT_HOME/logid.txt")
-  if [ "$COUNT" -ge 5 ]; then
-    ok "Fail logid.txt sisaldab vähemalt 5 vana faili"
+  FILES=(
+    "/var/logbackup/file1.log"
+    "/var/logbackup/file20.log"
+    "/var/logbackup/file40.log"
+    "/var/logbackup/file60.log"
+    "/var/logbackup/file80.log"
+  )
+  ALL_FOUND=true
+  for f in "${FILES[@]}"; do
+    if ! grep -q "$f" "$STUDENT_HOME/logid.txt"; then
+      ALL_FOUND=false
+    fi
+  done
+  if $ALL_FOUND; then
+    ok "Fail logid.txt sisaldab kõiki 5 vanemat logifaili"
   else
-    fail "Fail logid.txt sisaldab liiga vähe ridu ($COUNT)"
+    fail "Fail logid.txt ei sisalda kõiki vajalikke ridu"
   fi
 else
   fail "Fail logid.txt puudub"
 fi
 
-# 9. ssh.txt – peab sisaldama ssh_config faili asukohta
+# 8. ssh.txt – peab sisaldama ssh_config faili asukohta
 if [ -f "$STUDENT_HOME/ssh.txt" ]; then
   if grep -q "ssh_config" "$STUDENT_HOME/ssh.txt"; then
     ok "Fail ssh.txt sisaldab ssh_config faili asukohta"
