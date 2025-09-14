@@ -45,6 +45,17 @@ else
   fail "Fail abiline.txt puudub"
 fi
 
+# 17. failed.txt – syslogi read peavad sisaldama 'Failed' ja 'isc-dhcp-server'
+if [ -f "$STUDENT_HOME/failed.txt" ]; then
+  if grep -qi "Failed" "$STUDENT_HOME/failed.txt" && grep -qi "isc-dhcp-server" "$STUDENT_HOME/failed.txt"; then
+    ok "Fail failed.txt sisaldab 'Failed' ridu isc-dhcp-server teenuse kohta"
+  else
+    fail "Fail failed.txt ei sisalda piisavalt õigeid ridu)"
+  fi
+else
+  fail "Fail failed.txt puudub"
+fi
+
 # 6. peeter.txt – peab sisaldama /usr/local alt peetrile kuuluvaid faile
 if [ -f "$STUDENT_HOME/peeter.txt" ]; then
   if grep -q "/usr/local/peeter_files" "$STUDENT_HOME/peeter.txt"; then
@@ -129,17 +140,6 @@ if [ -f "$STUDENT_HOME/k2sud.txt" ]; then
   else
     fail "Fail k2sud.txt ei sisalda uptime väljundit lõpus"
   fi
-fi
-
-# 17. failed.txt – syslogi read sõnaga Failed
-if [ -f "$STUDENT_HOME/failed.txt" ]; then
-  if grep -qi "Failed" "$STUDENT_HOME/failed.txt"; then
-    ok "Fail failed.txt sisaldab logiridu sõnaga 'Failed'"
-  else
-    fail "Fail failed.txt ei sisalda sõna 'Failed'"
-  fi
-else
-  fail "Fail failed.txt puudub"
 fi
 
 # lisa kontrollid: ss.txt, pille.txt, big.txt, suured.txt
