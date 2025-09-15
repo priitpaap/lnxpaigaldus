@@ -196,13 +196,12 @@ else
 fi
 
 # 12 Kontrolli, et error*.log failid on kustutatud
-ERRORFILES=$(find /var/oldlogs -maxdepth 1 -type f -name "error*.log" 2>/dev/null)
-
-if [ -z "$ERRORFILES" ]; then
-  ok "Kõik error*.log failid on edukalt kustutatud"
+if find /var/oldlogs -maxdepth 1 -type f -name "error*.log" | grep -q .; then
+  fail "Kõik 'error' failid pole leitud ja kustutatud /var/oldlogs"
 else
-  fail "Error log failid on alles: $ERRORFILES"
+  ok "Kõik 'error' failid on edukalt kustutatud /var/oldlogs"
 fi
+
 
 # 13. cowsay paigaldatud
 if dpkg -s cowsay >/dev/null 2>&1; then
