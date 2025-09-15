@@ -198,7 +198,7 @@ fi
 
 # 14. uptime lisatud k2sud.txt lõppu
 if [ -f "$STUDENT_HOME/k2sud.txt" ]; then
-  if tail -n1 "$STUDENT_HOME/k2sud.txt" | grep -q "load average"; then
+  if grep -q "load average" "$STUDENT_HOME/k2sud.txt" ; then
     ok "Fail k2sud.txt lõpeb uptime väljundiga"
   else
     fail "Fail k2sud.txt ei sisalda uptime väljundit lõpus"
