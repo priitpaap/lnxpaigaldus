@@ -196,12 +196,12 @@ else
   fail "PATH ei ole laiendatud /srv/programmid kataloogiga"
 fi
 
-# 14. uptime lisatud k2sud.txt lõppu
+# 14. uptime lisatud k2sud.txt
 if [ -f "$STUDENT_HOME/k2sud.txt" ]; then
   if grep -q "load average" "$STUDENT_HOME/k2sud.txt" ; then
-    ok "Fail k2sud.txt lõpeb uptime väljundiga"
+    ok "Fail k2sud.txt sisaldab uptime väljundit"
   else
-    fail "Fail k2sud.txt ei sisalda uptime väljundit lõpus"
+    fail "Fail k2sud.txt ei sisalda uptime väljundit"
   fi
 fi
 
