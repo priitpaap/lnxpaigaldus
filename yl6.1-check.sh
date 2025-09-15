@@ -161,20 +161,19 @@ else
 fi
 
 # 9. alias list püsiv
-if su - student -c "bash --rcfile $STUDENT_HOME/.bashrc -i -c 'alias list'" >/dev/null 2>&1; then
-  if su - student -c "bash --rcfile $STUDENT_HOME/.bashrc -i -c 'alias list'" | grep -q "ls -lah"; then
-    if grep -q "alias list" "$STUDENT_HOME/.bashrc"; then
+if su - student -c "bash --rcfile $STUDENT_HOME/.bashrc -c 'alias list'" >/dev/null 2>&1; then
+  if su - student -c "bash --rcfile $STUDENT_HOME/.bashrc -c 'alias list'" | grep -q "ls -lah"; then
+    if grep -q "alias list='ls -lah'" "$STUDENT_HOME/.bashrc"; then
       ok "Alias 'list' on määratud ja kirjas .bashrc failis"
     else
       fail "Alias 'list' toimib, kuid puudub .bashrc failist"
     fi
   else
-    fail "Alias 'list' ei ole õigesti määratud (ei vasta õige ls käsk)"
+    fail "Alias 'list' ei ole õigesti määratud (ei vasta ls -lah)"
   fi
 else
-  fail "Alias 'list' puudub interaktiivses shellis"
+  fail "Alias 'list' puudub (bash ei saanud aliaset käivitada)"
 fi
-
 
 # 11. cowsay paigaldatud
 if dpkg -s cowsay >/dev/null 2>&1; then
