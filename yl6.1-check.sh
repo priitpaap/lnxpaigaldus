@@ -161,8 +161,8 @@ else
 fi
 
 # 9. alias list püsiv
-if su - student -c "bash -ic 'alias list'" >/dev/null 2>&1; then
-  if su - student -c "bash -ic 'alias list'" | grep -q "ls -lah"; then
+if su - student -c "bash --rcfile $STUDENT_HOME/.bashrc -i -c 'alias list'" >/dev/null 2>&1; then
+  if su - student -c "bash --rcfile $STUDENT_HOME/.bashrc -i -c 'alias list'" | grep -q "ls -lah"; then
     if grep -q "alias list" "$STUDENT_HOME/.bashrc"; then
       ok "Alias 'list' on määratud ja kirjas .bashrc failis"
     else
@@ -172,8 +172,9 @@ if su - student -c "bash -ic 'alias list'" >/dev/null 2>&1; then
     fail "Alias 'list' ei ole õigesti määratud (ei vasta õige ls käsk)"
   fi
 else
-  fail "Alias 'list' puudub"
+  fail "Alias 'list' puudub interaktiivses shellis"
 fi
+
 
 # 10. alias vlo püsiv
 if su - student -c "bash -ic 'alias vlo'" >/dev/null 2>&1; then
