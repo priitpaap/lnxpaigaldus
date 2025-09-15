@@ -160,19 +160,18 @@ else
   fail "Fail ssh.txt puudub"
 fi
 
-# 9. alias list püsiv
-if su - student -c "bash --rcfile $STUDENT_HOME/.bashrc -c 'alias list'" >/dev/null 2>&1; then
-  if su - student -c "bash --rcfile $STUDENT_HOME/.bashrc -c 'alias list'" | grep -q "ls -lah"; then
-    if grep -q "alias list='ls -lah'" "$STUDENT_HOME/.bashrc"; then
-      ok "Alias 'list' on määratud ja kirjas .bashrc failis"
-    else
-      fail "Alias 'list' toimib, kuid puudub .bashrc failist"
-    fi
-  else
-    fail "Alias 'list' ei ole õigesti määratud (ei vasta ls -lah)"
-  fi
+# 9. alias list olemas ja püsiv
+if grep -q "alias[[:space:]]\+list" "$STUDENT_HOME/.bashrc" && grep -q "ls -lah" "$STUDENT_HOME/.bashrc"; then
+  ok "Alias 'list' on kirjas .bashrc failis ja viitab õigele käsule"
 else
-  fail "Alias 'list' puudub (bash ei saanud aliaset käivitada)"
+  fail "Alias 'list' puudub või ei vasta õigele ls käsule"
+fi
+
+# 10. alias vlo olemas ja püsiv
+if grep -q "alias[[:space:]]\+vlo" "$STUDENT_HOME/.bashrc" && grep -q "cd /var/log" "$STUDENT_HOME/.bashrc"; then
+  ok "Alias 'vlo' on kirjas .bashrc failis ja viitab õigele käsule"
+else
+  fail "Alias 'vlo' puudub või ei vasta õigele käsule"
 fi
 
 # 11. cowsay paigaldatud
