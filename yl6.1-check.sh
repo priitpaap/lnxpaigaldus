@@ -188,12 +188,12 @@ else
   fail ".bashrc ei sisalda cowsay tervitust"
 fi
 
-# 13. PATH sisaldab /var/programmid
-if grep -q "/var/programmid" "$STUDENT_HOME/.bashrc" 2>/dev/null || \
-   grep -q "/var/programmid" "$STUDENT_HOME/.bash_profile" 2>/dev/null; then
-  ok "PATH on laiendatud /var/programmid kataloogiga (.bashrc või .bash_profile)"
+# 13. PATH sisaldab /srv/programmid
+if grep -q "/srv/programmid" "$STUDENT_HOME/.bashrc" 2>/dev/null || \
+   grep -q "/srv/programmid" "$STUDENT_HOME/.bash_profile" 2>/dev/null; then
+  ok "PATH on laiendatud /srv/programmid kataloogiga (.bashrc või .bash_profile)"
 else
-  fail "PATH ei ole laiendatud /var/programmid kataloogiga"
+  fail "PATH ei ole laiendatud /srv/programmid kataloogiga"
 fi
 
 # 14. uptime lisatud k2sud.txt lõppu
