@@ -177,8 +177,8 @@ fi
 # 11 Kontrolli big.txt – peab sisaldama setup.sh loodud suuri faile
 if [ -f "$STUDENT_HOME/big.txt" ]; then
   BIGFILES=(
-    "/var/bigfiles/big1.bin"
-    "/var/bigfiles/big2.bin"
+    "/var/backups/big1.bin"
+    "/var/log/big2.bin"
   )
   ALL_FOUND=true
   for f in "${BIGFILES[@]}"; do
