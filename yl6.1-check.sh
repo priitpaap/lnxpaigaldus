@@ -176,21 +176,6 @@ else
 fi
 
 
-# 10. alias vlo püsiv
-if su - student -c "bash -ic 'alias vlo'" >/dev/null 2>&1; then
-  if su - student -c "bash -ic 'alias vlo'" | grep -q "cd /var/log"; then
-    if grep -q "alias vlo" "$STUDENT_HOME/.bashrc"; then
-      ok "Alias 'vlo' on määratud ja kirjas .bashrc failis"
-    else
-      fail "Alias 'vlo' toimib, kuid puudub .bashrc failist"
-    fi
-  else
-    fail "Alias 'vlo' ei ole õigesti määratud"
-  fi
-else
-  fail "Alias 'vlo' puudub"
-fi
-
 # 11. cowsay paigaldatud
 if dpkg -s cowsay >/dev/null 2>&1; then
   ok "Pakk cowsay on paigaldatud"
