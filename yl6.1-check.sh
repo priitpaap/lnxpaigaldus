@@ -162,7 +162,7 @@ fi
 
 # 9. alias list püsiv
 if su - student -c "alias list" >/dev/null 2>&1; then
-  if su - student -c "alias list" | grep -q "ls -la"; then
+  if su - student -c "alias list" | grep -q "ls -lah"; then
     ok "Alias 'list' on määratud ja püsiv"
   else
     fail "Alias 'list' ei ole õigesti määratud"
