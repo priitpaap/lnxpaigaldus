@@ -174,6 +174,28 @@ else
   fail "Alias 'vlo' puudub või ei vasta õigele käsule"
 fi
 
+# 11 Kontrolli big.txt – peab sisaldama setup.sh loodud suuri faile
+if [ -f "$STUDENT_HOME/big.txt" ]; then
+  BIGFILES=(
+    "/var/bigfiles/big1.bin"
+    "/var/bigfiles/big2.bin"
+  )
+  ALL_FOUND=true
+  for f in "${BIGFILES[@]}"; do
+    if ! grep -q "$f" "$STUDENT_HOME/big.txt"; then
+      ALL_FOUND=false
+    fi
+  done
+  if $ALL_FOUND; then
+    ok "Fail big.txt sisaldab kõiki >300MB faile"
+  else
+    fail "Fail big.txt ei sisalda kõiki vajalikke ridu"
+  fi
+else
+  fail "Fail big.txt puudub"
+fi
+
+
 # 11. cowsay paigaldatud
 if dpkg -s cowsay >/dev/null 2>&1; then
   ok "Pakk cowsay on paigaldatud"
