@@ -195,22 +195,30 @@ else
   fail "Fail big.txt puudub"
 fi
 
+# 12 Kontrolli, et error*.log failid on kustutatud
+ERRORFILES=$(find /var/oldlogs -maxdepth 1 -type f -name "error*.log" 2>/dev/null)
 
-# 11. cowsay paigaldatud
+if [ -z "$ERRORFILES" ]; then
+  ok "Kõik error*.log failid on edukalt kustutatud"
+else
+  fail "Error log failid on alles: $ERRORFILES"
+fi
+
+# 13. cowsay paigaldatud
 if dpkg -s cowsay >/dev/null 2>&1; then
   ok "Pakk cowsay on paigaldatud"
 else
   fail "Pakk cowsay ei ole paigaldatud"
 fi
 
-# 12. .bashrc sisaldab cowsay tervitust
+# 14. .bashrc sisaldab cowsay tervitust
 if grep -q "cowsay" "$STUDENT_HOME/.bashrc"; then
   ok ".bashrc sisaldab cowsay tervitust"
 else
   fail ".bashrc ei sisalda cowsay tervitust"
 fi
 
-# 13. PATH sisaldab /srv/programmid
+# 15. PATH sisaldab /srv/programmid
 if grep -q "/srv/programmid" "$STUDENT_HOME/.bashrc" 2>/dev/null || \
    grep -q "/srv/programmid" "$STUDENT_HOME/.bash_profile" 2>/dev/null; then
   ok "PATH on laiendatud /srv/programmid kataloogiga (.bashrc või .bash_profile)"
@@ -218,7 +226,7 @@ else
   fail "PATH ei ole laiendatud /srv/programmid kataloogiga"
 fi
 
-# 14. uptime lisatud k2sud.txt
+# 16. uptime lisatud k2sud.txt
 if [ -f "$STUDENT_HOME/k2sud.txt" ]; then
   if grep -q "load average" "$STUDENT_HOME/k2sud.txt" ; then
     ok "Fail k2sud.txt sisaldab uptime väljundit"
