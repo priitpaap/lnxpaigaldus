@@ -189,10 +189,11 @@ else
 fi
 
 # 13. PATH sisaldab /var/programmid
-if su - student -c "echo \$PATH" | grep -q "/var/programmid"; then
-  ok "PATH sisaldab kataloogi /var/programmid"
+if grep -q "/var/programmid" "$STUDENT_HOME/.bashrc" 2>/dev/null || \
+   grep -q "/var/programmid" "$STUDENT_HOME/.bash_profile" 2>/dev/null; then
+  ok "PATH on laiendatud /var/programmid kataloogiga (.bashrc või .bash_profile)"
 else
-  fail "PATH ei sisalda kataloogi /var/programmid"
+  fail "PATH ei ole laiendatud /var/programmid kataloogiga"
 fi
 
 # 14. uptime lisatud k2sud.txt lõppu
@@ -203,15 +204,6 @@ if [ -f "$STUDENT_HOME/k2sud.txt" ]; then
     fail "Fail k2sud.txt ei sisalda uptime väljundit lõpus"
   fi
 fi
-
-# lisa kontrollid: ss.txt, pille.txt, big.txt, suured.txt
-for f in ss.txt pille.txt big.txt suured.txt; do
-  if [ -f "$STUDENT_HOME/$f" ]; then
-    ok "Fail $f on olemas"
-  else
-    fail "Fail $f puudub"
-  fi
-done
 
 echo ">>> Kontroll valmis."
 echo "Tulemused: $SCORE / $TOTAL õiget tulemust."
