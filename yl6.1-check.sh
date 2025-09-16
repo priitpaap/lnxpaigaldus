@@ -225,13 +225,15 @@ else
   fail "PATH ei ole laiendatud /srv/programmid kataloogiga"
 fi
 
-# 16. uptime lisatud k2sud.txt
+# 16. Kontrolli, kas ajalugu ja uptime on salvestatud
 if [ -f "$STUDENT_HOME/k2sud.txt" ]; then
-  if grep -q "load average" "$STUDENT_HOME/k2sud.txt" ; then
-    ok "Fail k2sud.txt sisaldab uptime väljundit"
+  if grep -q "history" "$STUDENT_HOME/k2sud.txt" && grep -q "load average" "$STUDENT_HOME/k2sud.txt"; then
+    ok "Fail k2sud.txt sisaldab käsuajalugu ja uptime väljundit"
   else
-    fail "Fail k2sud.txt ei sisalda uptime väljundit"
+    fail "Fail k2sud.txt ei sisalda käsuajalugu või uptime väljundit"
   fi
+else
+  fail "Fail k2sud.txt puudub"
 fi
 
 echo ">>> Kontroll valmis."
