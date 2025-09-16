@@ -161,10 +161,22 @@ else
 fi
 
 # 9. alias list olemas ja püsiv
-if grep -q "alias[[:space:]]\+list" "$STUDENT_HOME/.bashrc" && grep -q "ls -lah" "$STUDENT_HOME/.bashrc"; then
-  ok "Alias 'list' on kirjas .bashrc failis ja viitab õigele käsule"
+ALIAS_LINE=$(grep -E "alias[[:space:]]+list=" "$STUDENT_HOME/.bashrc")
+
+if [ -n "$ALIAS_LINE" ]; then
+  if echo "$ALIAS_LINE" | grep -q "ls"; then
+    if echo "$ALIAS_LINE" | grep -q "\-l" && \
+       echo "$ALIAS_LINE" | grep -q "\-a" && \
+       echo "$ALIAS_LINE" | grep -q "\-h"; then
+      ok "Alias 'list' on õigesti määratud (.bashrc sisaldab ls -lah)"
+    else
+      fail "Alias 'list' ei sisalda kõiki nõutud lippusid (-l -a -h)"
+    fi
+  else
+    fail "Alias 'list' ei viita käsule ls"
+  fi
 else
-  fail "Alias 'list' puudub või ei vasta õigele ls käsule"
+  fail "Alias 'list' puudub .bashrc failist"
 fi
 
 # 10. alias vlo olemas ja püsiv
