@@ -165,10 +165,10 @@ ALIAS_LINE=$(grep -E "alias[[:space:]]+list=" "$STUDENT_HOME/.bashrc")
 
 if [ -n "$ALIAS_LINE" ]; then
   if echo "$ALIAS_LINE" | grep -q "ls"; then
-    if echo "$ALIAS_LINE" | grep -q "\-l" && \
-       echo "$ALIAS_LINE" | grep -q "\-a" && \
-       echo "$ALIAS_LINE" | grep -q "\-h"; then
-      ok "Alias 'list' on õigesti määratud (.bashrc sisaldab ls -lah)"
+    if echo "$ALIAS_LINE" | grep -Eq -- "-[^ ]*l" && \
+       echo "$ALIAS_LINE" | grep -Eq -- "-[^ ]*a" && \
+       echo "$ALIAS_LINE" | grep -Eq -- "-[^ ]*h"; then
+      ok "Alias 'list' on õigesti määratud (.bashrc sisaldab ls koos -l -a -h lippudega)"
     else
       fail "Alias 'list' ei sisalda kõiki nõutud lippusid (-l -a -h)"
     fi
