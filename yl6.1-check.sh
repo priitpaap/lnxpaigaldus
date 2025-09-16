@@ -168,9 +168,9 @@ if [ -n "$ALIAS_LINE" ]; then
     if echo "$ALIAS_LINE" | grep -Eq -- "ls.*-.*l" && \
        echo "$ALIAS_LINE" | grep -Eq -- "ls.*-.*a" && \
        echo "$ALIAS_LINE" | grep -Eq -- "ls.*-.*h"; then
-      ok "Alias 'list' on õigesti määratud (.bashrc sisaldab ls koos -l -a -h lippudega)"
+      ok "Alias 'list' on õigesti määratud (.bashrc sisaldab ls koos -lah lippudega)"
     else
-      fail "Alias 'list' ei sisalda kõiki nõutud lippusid (-l -a -h)"
+      fail "Alias 'list' ei sisalda kõiki nõutud lippusid"
     fi
   else
     fail "Alias 'list' ei viita käsule ls"
