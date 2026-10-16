@@ -104,6 +104,9 @@ if ! dpkg -s openssh-server >/dev/null 2>&1; then
   apt-get install -y openssh-server >/dev/null 2>&1
 fi
 
+# Uuenda pakettide nimekirjad
+apt-get update
+
 # Paigalda rsyslog
 apt install -y rsyslog >/dev/null 2>&1 || true
 
